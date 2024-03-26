@@ -5,14 +5,14 @@ class Solution(object):
         :type target: int
         :rtype: List[int]
         """
-
-        previous = {}
+        
+        hashmap = {} # number : index
 
         for index, number in enumerate(nums):
-            difference = target - number
-            if difference in previous:
-                return [previous[difference], index]
-            previous[number] = index
-        
+            complement = target - number
+            if complement in hashmap:
+                return [hashmap[complement], index]
+            else:
+                hashmap[number] = index    
         return 
-
+               
