@@ -1,25 +1,22 @@
+from collections import defaultdict
 class Solution:
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
 
-        # empty hashmap
+        """
+        Space Complexity: O(n * m)
+        Time Complexity: O(n * m log m)
+        """
 
-        # iterate
-        # hash a word
-        # if we find a word with the same characters, we add it to the word's list of words
-        # return the dictionaries's values
+        hashmap = defaultdict(list)
 
-        hashmap = {}
-
-        for word in strs: # O(n)
-            sorted_word = "".join(sorted(word)) # for word of length m: O(mlogm)
-            if sorted_word not in hashmap:
-                hashmap[sorted_word] = [word]
-            else:
-                 hashmap[sorted_word].append(word)
+        for word in strs:
+            alphabet_pattern = [0] * 26
+            for char in word:
+                alphabet_pattern[ord(char) - ord('a')] += 1
+            
+            key = tuple(alphabet_pattern)
+            hashmap[key].append(word)
         
-        return list(hashmap.values())
-
-        # Time complexity: n + n * (mlogm) --> O(mlogm)
-
+        return hashmap.values()
         
-        
+ 
