@@ -6,13 +6,15 @@ class Solution(object):
         :rtype: List[int]
         """
         
-        hashmap = {} # number : index
+        hashmap = {}
+        length = len(nums)
 
         for index, number in enumerate(nums):
-            complement = target - number
-            if complement in hashmap:
-                return [hashmap[complement], index]
-            else:
-                hashmap[number] = index    
-        return 
-               
+            hashmap[number] = index
+        
+        for i in range(length):
+            complement = target - nums[i]
+            if complement in hashmap and hashmap[complement] != i:
+                return [i, hashmap[complement]]
+        
+            
