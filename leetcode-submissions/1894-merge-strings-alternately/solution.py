@@ -4,25 +4,22 @@ class Solution:
         # Repeat until one exhaust
         # In case one exhaust, add the remaining letters of the other
 
-        length1 = len(word1)
-        length2 = len(word2)
+        length1, length2 = len(word1), len(word2)
+        min_length = min(length1, length2)
 
-        max = length1
+        merged_word = ""
 
-        if length2 > length1:
-            max = length2
+        for i in range(min_length):
+            merged_word += word1[i] + word2[i]
+
+        difference = length1 - length2
+        if difference > 0:
+            merged_word += word1[-difference:]
+        elif difference < 0:
+            merged_word += word2[difference:]
+            
+        return merged_word
         
 
-        merged_string = ""
-        i = 0
-        while i < max:
-            try:
-                merged_string += word1[i] + word2[i]
-            except IndexError:
-                break
-            i += 1
-        
-        merged_string = merged_string + word1[i:] + word2[i:]
 
-        return merged_string
 
