@@ -1,28 +1,30 @@
 class Solution:
     def threeSum(self, nums: List[int]) -> List[List[int]]:
-        triplets = set()
-        nums.sort()   
-        count = len(nums)
-        for i in range(count):
-            a = i + 1
-            b = count - 1
 
-            while a < b:
-                if nums[a] + nums[i] + nums[b] == 0:
-                    triplets.add((nums[a], nums[i], nums[b]))
-                    a += 1
-                    b -= 1
+        """
+        Time O(n^2)
+        Space O(n)
+        """
 
-                elif nums[a] + nums[i] + nums[b] < 0:
-                    a += 1
-                
+        nums.sort()
+        print(nums)
+        k = 0
+        length = len(nums)
+        threesum = []
+
+        while k < length:
+            i, j = k + 1, length - 1
+            while i < j:
+                if nums[i] + nums[j] + nums[k] == 0:
+                    threesum.append((nums[k], nums[i], nums[j]))
+                    i += 1
+                    j -= 1 
+                elif nums[i] + nums[j] + nums[k] > 0:
+                    j -= 1
                 else:
-                    b -= 1
+                    i += 1           
+            k += 1
         
-        return triplets
-            
+        return list(set(threesum))
         
-        
-        
-
         
