@@ -1,32 +1,26 @@
-class Solution:
-    def twoSum(self, nums: List[int], target: int) -> List[int]:
+class Solution(object):
+    def twoSum(self, nums, target):
         """
-        Time: O(logn)
+        :type nums: List[int]
+        :type target: int
+        :rtype: List[int]
         """
 
         hashmap = {}
+        length = len(nums)
 
         for index, number in enumerate(nums):
-            hashmap[index] = number
-
-        hashmap = dict(sorted(hashmap.items(), key=lambda x:x[1]))  
-        hashmap_values = list(hashmap.values())
-        hashmap_keys = list(hashmap.keys())
-        print(hashmap)
-
-        l, r = 0, len(nums) - 1
-
-        while l < r:
-            print(l, r)
-            if hashmap_values[l] + hashmap_values[r] < target: 
-                l += 1
-
-            elif hashmap_values[l] + hashmap_values[r] > target:
-                r -= 1
-            
-            else:
-                return [hashmap_keys[l], hashmap_keys[r]]
-
-
-
+            hashmap[number] = index
         
+        
+        for i in range(length):
+            compliment = target - nums[i]
+            print(compliment)
+
+            if compliment in hashmap and hashmap[compliment] != i:
+                return [hashmap[compliment], i]
+            else:
+                pass
+        return
+
+
