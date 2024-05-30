@@ -1,11 +1,20 @@
 class Solution:
     def mySqrt(self, x: int) -> int:
-        left, right = 0, x + 1
-        while left < right:
-            mid = left + (right - left) // 2
-            if mid * mid <= x:
-                left = mid + 1
+        """
+        Time: O(logn)
+        Space: O(1)
+        Intuition: Take advantage of the numbers sorted quality and utilize binary search to halve the search space. Remember to return a rounded down.
+        """
+        lo, hi = 0, x
+
+        while lo <= hi:
+            mid = lo + (hi - lo) // 2
+              
+            if mid * mid > x:
+                hi = mid - 1
+            elif mid * mid == x:
+                return mid
             else:
-                right = mid
-        return left - 1
-        
+                lo = mid + 1
+        return lo - 1
+
