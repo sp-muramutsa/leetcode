@@ -1,34 +1,23 @@
 class Solution:
     def replaceElements(self, arr: List[int]) -> List[int]:
-        
+
         """
-        Time: O(n) 
-        Space O(1) 
+        Time: O(n)
+        Space: O(1)
+        Intuition: Start from the end tracking the right maximum value and updating accordingly
         """
-        length = len(arr)
-        m = arr[-1]
-        for i in range(length - 1, -1, -1):
-            if arr[i] > m:
-                m, arr[i] = arr[i], m
-            else:
-                arr[i] = m
-        arr[-1] = -1
-
-        return arr
-        
-     
-
-        
-        
-        
-        
-
-        
-
        
+        i = len(arr) - 1
+        right_max = arr[-1]
 
+        while i >= 0:
+            temp = arr[i]
+            arr[i] = right_max
+            right_max = max(right_max, temp)
+            i -= 1
         
-
-
-    
+        # Set the last element to a -1
+        arr[-1] = -1
+        
+        return arr
         
