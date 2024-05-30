@@ -1,40 +1,27 @@
 class Solution:
     def longestCommonPrefix(self, strs: List[str]) -> str:
 
-        """
-        Time complexity: O(nm + nlog(n))
-        Space complexity: O(m + n)
-        """
+        def prefix(word1 : str, word2: str):
+            length = min(len(word1), len(word2))
+            common_prefix = ""
 
-        def compare_prefixation(word1: str, word2: str) -> bool:
-            prefix = ""
-            length1, length2 = len(word1), len(word2)
-            min_len = min(length1, length2)
-
-            for i in range(min_len):
+            for i in range(length):
                 if word1[i] == word2[i]:
-                    prefix += word[i]
+                    print("Yes")
+                    common_prefix = common_prefix + word1[i]
                 else:
                     break
-            return prefix
-            
-            
-        
-        prefix = strs[0]
-        for word in strs[1:]:
-            prefix = compare_prefixation(word, prefix)
-        
-        return prefix
-
-        
-
-
-        
-
-      
+                    
+            return common_prefix
             
 
+        length = len(strs)
+        common_prefix = strs[0]
+        for i in range(1, length):
+            common_prefix = prefix(common_prefix, strs[i])
+        
+        return common_prefix
 
-       
+
         
-        
+    
