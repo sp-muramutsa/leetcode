@@ -1,25 +1,44 @@
-class Solution:
-    def numUniqueEmails(self, emails: List[str]) -> int:
+class Solution(object):
+    def numUniqueEmails(self, emails):
         """
-        Time O(n * m * k)
-        Space O(n)
-        """
-        valids = []
-        for email in emails: # O(n)
-            local, domain = email.split("@")  #O(m) where m is the email length
+        :type emails: List[str]
+        :rtype: int
+        """     
+        
+        """ 
+        Time: O(n)
+        Space: 
+        Intuition: 
+        # Iterate from left to right
+        # Take an email and extract it's unique local name
+        # Hash that unique name with a list of related domain names(use set for these) """
 
-            if "." in local:
-                local = local.replace(".", "") #O(m) where m is the email length
+        def filter_local_name(email):
+            k = len(email)
+            email_copy = ""
+            for i in range(k):
+                if email[i] != ".":
+                    email_copy = email_copy + email[i]                 
+                elif email[i] == "+":
+                    break
+            try:
+                x = email_copy.index("+")
+            except ValueError:
+                x = k
             
-            if "+" in local:
-                plus_index = local.index("+") #O(m) where m is the email length
-                local = local[:plus_index] #O(m) where m is the email length
-            
-            valid_email = local + "@" + domain #O(m) where m is the email length
-            if valid_email not in valids: #O(k) where k is the valids list length
-                valids.append(valid_email)
-        
-        return len(valids)
-           
-        
-        
+            return email_copy[:x]
+                 
+
+        length = len(emails)
+        unique_emails = set()
+
+        for i in range(length):
+            email = emails[i]
+            separator = email.index("@")
+            unfiltered_local_name = email[:separator]
+            filtered_local_name = filter_local_name(unfiltered_local_name)
+            domain_name = email[separator+1:]
+            unique_emails.add((filtered_local_name, domain_name))         
+         
+
+        return len(unique_emails)
