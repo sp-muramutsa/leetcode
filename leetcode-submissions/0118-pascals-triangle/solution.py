@@ -1,23 +1,21 @@
 class Solution:
     def generate(self, numRows: int) -> List[List[int]]:
+
         """
-        Time O(numRows ^ 2)
-        Space O(numRows)
+        Intuition: Put 2 dummy zeros on either side of the previous array
+        Time: O(n^2)
+        Space: O(n^2)
         """
 
-        pascal_triangle = [[1]]
-        for i in range(1, numRows):
-            # 1
-            list_i = [1] 
-            
-            # 2
-            prev_list = pascal_triangle[i - 1]
-            length = len(prev_list)     
-            for j in range(length-1):
-                list_i.append(prev_list[j] + prev_list[j + 1])
-            # 3
-            list_i.append(1)
-            pascal_triangle.append(list_i)
-        return pascal_triangle
-
+        triangle = [[1]]
         
+        for i in range(1, numRows):
+            previous = [0] + triangle[i-1] + [0] # dummy zeros on either side
+            level = []
+
+            for j in range(i + 1):
+                level.append(previous[j] + previous[j+1])
+            triangle.append(level)
+            
+        return triangle
+
