@@ -1,30 +1,29 @@
 class Solution:
     def validPalindrome(self, s: str) -> bool:
-
         """
-        Time O(n)
-        Space O(n^2)
-   
-        The intuition is we try to remove the right or left pointer and then check if the
-        remaining string would be a palindrome, was the pointer removed. But we only do that
-        in cases where left and right are different so we save time
-        """   
+        Time: O(n)
+        Space: O(n)
+        Intuition:
+        Use a two-pointer technique to check characters from the beginning and the end.
+        If characters mismatch, check the substrings formed by skipping one character
+        from either end. If any of those substrings is a palindrome, the original string
+        can be a palindrome by removing one character.
+        """
 
-        left, right= 0, len(s) - 1
 
-        while left < right:
-            if s[left] != s[right]:
-                skip_left = s[left+1 : right+1]
-                skip_right = s[left : right]
+        length = len(s)
+        l, r = 0, length - 1
 
-                return (skip_left == skip_left[::-1] or 
-                        skip_right == skip_right[::-1])
-
-            left += 1
-            right -= 1
-            
+        
+        while l < r:
+            if s[l] != s[r]:
+                left_s = s[:l] + s[l+1:]
+                right_s = s[:r] + s[r+1:]
+                return left_s == left_s[::-1] or right_s == right_s[::-1]
+            l += 1
+            r -= 1
+     
         
         return True
-                    
-
-        
+    
+       
