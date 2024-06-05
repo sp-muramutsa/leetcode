@@ -1,30 +1,20 @@
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
 
-        """
-        Intuition: use two pointers(sliding window) iteration form left to right to compare possible profits and find a maximum
-        Time: O(n)
-        Space: O(1)
-        """
+        max_profit = 0
+        l, r = 0, 1
+        n = len(prices)
 
-        number_of_days = len(prices)
-        buy, sell = 0, 1
-        maximum_profit = 0
+        while r < n:
+            # profit can be made
+            if prices[r] - prices[l] > 0:
+                max_profit = max(max_profit, prices[r] - prices[l])
+                r += 1
 
-        while sell < number_of_days:
-            profit = prices[sell] - prices[buy]
-            if profit > 0:
-                if profit > maximum_profit:
-                    maximum_profit = profit
-                sell += 1
+            # profit can't be made
             else:
-                buy = sell
-                sell += 1
-                
-        return maximum_profit
-
-                
-          
-
-
+                l = r
+                r += 1
+            
         
+        return max_profit
