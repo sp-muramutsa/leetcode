@@ -2,19 +2,28 @@ class Solution:
     def moveZeroes(self, nums: List[int]) -> None:
         """
         Do not return anything, modify nums in-place instead.
+        Time: O(n) 
+        Space: O(n)
+        Intuition: Move left to right pushing non-zero elements to the start. Pushing zeros to the end wasn't quite working!
         """
 
-        """
-        Intuition: We move from left to right and when we see a non-zero value, we bring 
-        it to the position of our left pointer
-        """
+        i = 0
+        n = len(nums)
+        j = 1
 
-        l, r, length = 0,  0, len(nums)
+        if n <= 1:
+            return 
 
-        while r < length:
-            if nums[r] != 0:
-                nums[l], nums[r] = nums[r], nums[l]
-                l += 1
-            r += 1
-                
+
+        while j < n:
+            if nums[i] != 0:
+                i += 1
+            if nums[j] != 0 and nums[i] == 0:
+                nums[i], nums[j] = nums[j], nums[i]
+                i += 1
+           
+            j += 1
         
+
+        
+             
