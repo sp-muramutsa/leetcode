@@ -2,7 +2,6 @@ class Solution {
     public boolean isValid(String s) {
         char[] chars = s.toCharArray();
         Stack<Character> a = new Stack<Character>();
-
         for(char c: chars) {
             if (c == '(') {
                 a.push(')');
