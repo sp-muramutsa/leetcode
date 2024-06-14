@@ -10,11 +10,12 @@ class Solution:
     
             return ''.join(result)
     
-        if backspace(s) == backspace(t):
-            return True
-        else:
-            return False
+        return backspace(s) == backspace(t)
+ 
     
+
+    
+        
 
     
         
