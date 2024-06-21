@@ -16,7 +16,6 @@ class Solution {
 
         ListNode slow = head;
         ListNode fast = head.next;
-
         while(fast != null && fast.next != null) {
             slow = slow.next;
             fast = fast.next.next;
@@ -25,14 +24,11 @@ class Solution {
 
         //reverse the second half
         ListNode prev = null;
-
         while(slow != null) {
-
             ListNode nextNode = slow.next;
             slow.next = prev;
             prev = slow;
             slow = nextNode;
-
         }
 
         fast = head;
