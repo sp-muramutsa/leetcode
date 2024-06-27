@@ -1,21 +1,18 @@
 class Solution:
     def twoSum(self, numbers: List[int], target: int) -> List[int]:
+
         length = len(numbers)
+        l, r = 0, length - 1
 
-        i = 0
-        j = length - 1
+        while  l < r:
+            # solution
+            if numbers[l] + numbers[r] == target:
+                return [l+1, r+1]
 
-
-        while i < j:
-            if numbers[i] + numbers[j] == target:
-                return [i + 1, j + 1]
+            # right
+            elif numbers[l] + numbers[r] > target:
+                r -= 1
             
-            elif numbers[i] + numbers[j] < target: # if sum is less than target, move left pointer to the right
-                i += 1
-                
-            else: # if sum is larger than target, move right pointer to the left
-                j -= 1
-        
-        return []
-        
-        
+            # left
+            elif numbers[l] + numbers[r] < target:
+                l += 1
