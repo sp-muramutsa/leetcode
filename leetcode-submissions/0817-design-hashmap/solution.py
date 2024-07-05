@@ -1,20 +1,20 @@
 class MyHashMap:
 
     def __init__(self):
-        self.items = [-1] * (10**6 + 1)
-        
+        self.map = {}
         
 
     def put(self, key: int, value: int) -> None:
-        self.items[key] = value
+        self.map[key] = value
         
 
     def get(self, key: int) -> int:
-        return self.items[key]
-
+        return self.map[key] if key in self.map else - 1
+        
 
     def remove(self, key: int) -> None:
-        self.items[key] = -1
+        if key in self.map:
+            del self.map[key] 
         
 
 
