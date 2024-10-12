@@ -1,20 +1,23 @@
-class Solution:
-    def isPalindrome(self, s: str) -> bool:
-
+class Solution(object):
+    def isPalindrome(self, s):
         """
-        Two pointer
+        :type s: str
+        :rtype: bool
         """
 
-        s = "".join(char.lower() for char in s if char.isalnum())
+        s_alpha = ""
+
+        for char in s:
+            if char.isalnum():
+                s_alpha += char.lower()
+
         
-        l, r = 0, len(s) - 1
+        i, j = 0, len(s_alpha) - 1
 
-        while l <= r:
-            if s[l] == s[r]:
-                l += 1
-                r -= 1
-            else:
+        while i <= j:
+            if s_alpha[i] != s_alpha[j]:
                 return False
-        
+            i += 1
+            j -= 1
         return True
-       
+        
