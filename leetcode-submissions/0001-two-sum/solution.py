@@ -7,15 +7,14 @@ class Solution(object):
         """
 
         hashmap = {}
-        length = len(nums)
+        n = len(nums)
 
-        for index, number in enumerate(nums):
-            hashmap[number] = index  
+        for index, num in enumerate(nums):
+            hashmap[num] = index
 
-        for i in range(length):
-            complement = target - nums[i]
-            if complement in hashmap and i != hashmap[complement]:
-                return [hashmap[complement], i]
+        for i in range(n):
+            diff = target - nums[i]
+            if diff in hashmap and i != hashmap[diff]:
+                return [i, hashmap[diff]]
 
-
-
+       
