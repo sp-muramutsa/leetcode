@@ -1,16 +1,14 @@
-class Solution:
-    def validPalindrome(self, s: str) -> bool:
+class Solution(object):
+    def validPalindrome(self, s):
         """
-        Time: O(n)
-        Space: O(n)
-        Intuition:
-        Use a two-pointer technique to check characters from the beginning and the end.
-        If characters mismatch, check the substrings formed by skipping one character
-        from either end. If any of those substrings is a palindrome, the original string
-        can be a palindrome by removing one character.
+        :type s: str
+        :rtype: bool
         """
-
-
+        """
+        We use two pointers to iterate. One from the start and another from the end. We move the pointers whenever the characters are equal i.e. satisfies the property of palindrome. 
+        We check for cases where it's not a palindrome and see if it would be a palindrome upon deletion of either the left pointed character or the right pointed one.
+        """
+        
         length = len(s)
         l, r = 0, length - 1
 
