@@ -1,30 +1,29 @@
-class Solution:
-    def isValid(self, s: str) -> bool:
+class Solution(object):
+    def isValid(self, s):
         """
-        Time: O(n)
-        Space: O(1)
-        Intuition: When you encounter an opening bracket, push it to the top of the stack. When you encounter a closing bracket, check if the top of the stack was the opening for it. If yes, pop it from the stack. Otherwise, return false.
+        :type s: str
+        :rtype: bool
         """
+        hashmap = {")" : "(", "}": "{", "]": "["}
 
-        
-        length, stack = len(s), []
-        open_to_close = {")": "(", "}": "{", "]": "["}
-        
-        for char in s:
-            # Closing parenthesis
-            if char in open_to_close: # For dictionary keys. Closing parentheses in this case.
-                if stack and stack[-1] == open_to_close[char]:
+        stack = []
+        n = len(s)
+        i = 0
+
+        while i < n:
+            # opening bracket: push it to the top of the stack
+            if s[i] in ["(", "{", "["]:
+                stack.append(s[i])
+            # closing bracket: check if the top of the stack is its opening if yes, pop. else, return false.
+            else:
+                if stack and hashmap[s[i]] == stack[-1]:
                     stack.pop()
                 else:
                     return False
-            else: # Opening parentheses
-                stack.append(char)
-  
-        return True if not stack else False
-      
-            
-       
-       
 
-   
-        
+            i += 1
+           
+        return not stack
+
+
+
