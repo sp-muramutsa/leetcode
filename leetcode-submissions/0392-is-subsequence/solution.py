@@ -1,35 +1,21 @@
-class Solution:
-    def isSubsequence(self, s: str, t: str) -> bool:
-
+class Solution(object):
+    def isSubsequence(self, s, t):
         """
-        Time: O(n) where n in the length of t
-        Space: O(1)
-        Intuition:
-        Use two pointers to traverse both strings. The idea is to check if all characters of `s` appear in `t` in the same order.
-        - Initialize two pointers: `s_pointer` for string `s` and `t_pointer` for string `t`.
-        - Traverse `t` with `t_pointer` and whenever a character in `t` matches the current character in `s` (pointed to by `s_pointer`), move the `s_pointer` to the next character.
-        - If `s_pointer` reaches the end of `s`, it means all characters of `s` have been found in `t` in the correct order, so return True.
-        - If the loop finishes and `s_pointer` has not reached the end of `s`, return False.
-        
+        :type s: str
+        :type t: str
+        :rtype: bool
+        Intuition: Set two pointers going from left to right in both strings. Check to see if a character in t is equal to s. If yes then increment the pointer in s. Increment the one in t everytime. At the end we check if all characters in s were found in t. This will work since it's a forward movement so the order of characters is maintained.
         """
+        pointer_s = pointer_t = 0
+        length_s = len(s)
+        length_t = len(t)
 
-        s_pointer, t_pointer = 0, 0
-        s_length, t_length = len(s), len(t)
-
-        while s_pointer < s_length and t_pointer < t_length:
-            if s[s_pointer] == t[t_pointer]:
-                s_pointer += 1
-            t_pointer += 1  
+        while pointer_t < length_t and pointer_s < length_s:
+            if s[pointer_s] == t[pointer_t]:
+                pointer_s += 1
+            pointer_t += 1
         
-        if s_pointer == s_length:
-            return True
-        else:
-            return False
-    
+        return pointer_s == length_s
 
-
-       
         
         
-
-
