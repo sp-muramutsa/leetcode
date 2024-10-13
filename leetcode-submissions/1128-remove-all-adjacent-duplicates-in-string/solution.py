@@ -1,18 +1,26 @@
-class Solution:
-    def removeDuplicates(self, s: str) -> str:
-        x = []
+class Solution(object):
+    def removeDuplicates(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
 
-        for char in s:
-            if x and char == x[-1]:
-                x.pop()
-            
+
+        n = len(s)
+        if n <= 1:
+            return s
+        stack = [s[0]]
+        
+
+        for i in range(1, n):
+            if stack and s[i] == stack[-1]:
+                stack.pop()
             else:
-                x.append(char)
+                stack.append(s[i])
         
-        return "".join(x)
-
-
-
+        return "".join(char for char in stack)
         
 
+
+        
         
