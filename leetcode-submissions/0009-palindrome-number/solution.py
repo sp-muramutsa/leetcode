@@ -1,12 +1,16 @@
 class Solution:
-    def isPalindrome(self, x: int) -> bool:
-        #parse or mod stuff
-        num = str(x)
-        n = len(num)
-        front, back = 0, n - 1
-        while front < back:
-            if num[front] != num[back]:
-                return False
-            front += 1
-            back -= 1
-        return True
+    def isPalindrome(self, x: int) -> bool:      
+
+        if x < 0:
+            return False
+        
+        temp = x
+        remainder = 0 
+        reverse = 0
+        while temp > 0:
+            remainder = temp % 10
+            reverse = reverse * 10 + remainder
+            temp = temp // 10
+        
+        return reverse == x
+        
