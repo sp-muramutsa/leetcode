@@ -1,21 +1,13 @@
-class Solution:
-    def twoSum(self, nums: List[int], target: int) -> List[int]:
+class Solution(object):
+    def twoSum(self, nums, target):
         """
+        :type nums: List[int]
+        :type target: int
+        :rtype: List[int]
         """
-
-        length = len(nums)
         hashmap = {}
-        
-        
-        for i in  range(length):
-            hashmap[target - nums[i]] = i 
-        print(hashmap)
-        
-        for key, value in enumerate(nums):
-            if value in hashmap and hashmap[value] != key:
-                return [hashmap[value], key]
-
-
-
-
-        
+        for i, n in enumerate(nums):
+            num = target - n
+            if num in hashmap:
+                return [hashmap[num], i]
+            hashmap[n] = i
