@@ -3,11 +3,9 @@ class Solution:
         hashset = set()
 
         for number in nums:
-            if number in hashset:
-                return True
-            else:
+            if number not in hashset:
                 hashset.add(number)
+            else:
+                return True
         
         return False
-
-        
