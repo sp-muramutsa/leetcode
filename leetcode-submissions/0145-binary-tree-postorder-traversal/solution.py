@@ -4,16 +4,30 @@
 #         self.val = val
 #         self.left = left
 #         self.right = right
+
+# Iterative: REVERSE the result of a post order that goes right before left.
+# Basically we do: ROOT-RIGHT-LEFT then reverse the result. Consult the notes for pre order solutions.
+# Please remember .reverse() reverses the function inplace and returns None.
+
+# Time: O(n)
+# Space: O(h)
 class Solution:
-    def __init__(self):
-            self.postorder = []
-
     def postorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
-        if root is None:
-            return []
-        self.postorderTraversal(root.left)
-        self.postorderTraversal(root.right)
-        self.postorder.append(root.val)
 
-        return self.postorder
+        current = root
+        stack = []
+        traversal = []
+
+        while current or stack:
+            while current:
+                traversal.append(current.val)
+                stack.append(current)
+                current = current.right
+            
+            current = stack.pop()
+            current = current.left
+        
+        traversal.reverse()
+        return traversal
+            
         
