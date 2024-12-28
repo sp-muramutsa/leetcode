@@ -4,37 +4,23 @@
 #         self.val = val
 #         self.left = left
 #         self.right = right
-
-# Iterative solution
-# Time: Average is O(h) and worst case is O(n) in case of a linked list
-# Space: Worst is O(n) in case of linked list
 class Solution:
     def inorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
-        if root is None:
-            return []
-        
+        #so we need a node that points to the node we are at, and it starts at root.
+        node = root
+        #we use a stacl to store the nodes we have visited the same way the recursion works.
         stack = []
-        traversal = []
-        current = root # Pointer to the current node
+        #the list for the nodes values.
+        result = []
+        while node or stack:
+            while node:
+                stack.append(node)
+                node = node.left
+            #this means we are at the leaf or node without left
+            #we set the node pointer to the previous node as it is Null at the moment
+            node = stack.pop()
+            #we add the value to the result
+            result.append(node.val)
+            node = node.right
+        return result
 
-        while current or stack:
-            # Traverse the left part of the tree while stacking the nodes
-            while current:
-                stack.append(current)
-                current = current.left
-            
-            # Pop from the stack and traverse the right side of the tree.
-            # The pointer goes to the node that we just popped
-            current = stack.pop()
-            traversal.append(current.val)
-            current = current.right
-        
-        return traversal
-
-            
-
-
-
-
-
-    
