@@ -4,18 +4,16 @@
 #         self.val = val
 #         self.left = left
 #         self.right = right
-
-
-# Recursive approach
-# Time: O(n)
-# Space: O(height)
 class Solution:
     def maxDepth(self, root: Optional[TreeNode]) -> int:
-        if not root:
+        if root is None:
             return 0
-
-        left_height = self.maxDepth(root.left)
-        right_height = self.maxDepth(root.right)
-
-        return max(left_height, right_height) + 1
-
+        stack = [(root, 1)]
+        res = 1
+        while stack:
+            node, height = stack.pop()
+            if node:
+                res = max(res, height)
+                stack.append((node.right, height+1))
+                stack.append((node.left, height+1))
+        return res
