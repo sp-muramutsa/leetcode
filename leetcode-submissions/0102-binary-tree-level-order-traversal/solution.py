@@ -5,11 +5,12 @@
 #         self.left = left
 #         self.right = right
 
-# Iterative using deque from collections
-# Time: O(n)
-# Space: O(n)
-
-from collections import deque
+# Cleaner recursive solution
+# Intuition: Start on level 0
+# Check the level. If it's a new level: Create a new list for it.
+# Always append to the list on each iteration. You append each element to the sublist corresponding to its level.
+# Time: O(n) -> Can be O(n^2) in a skewed tree
+# Space: O(n) recursion stack space
 
 
 class Solution:
@@ -18,26 +19,18 @@ class Solution:
         if not root:
             return traversal
 
-        queue = deque([root])
+        def helper(node, level):
+            if len(traversal) == level:
+                traversal.append([])
 
-        while queue:
-            # Get level
-            level = len(queue)
-            level_traversal = []
+            traversal[level].append(node.val)
 
-            # Iterate  throught the queue while popping nodes on the current level.
-            # i.e. Pop the leftmost node(FIFO) and add it to the list of the current traversal
-            # Add children to the queue: Left child, then right child.
-            for _ in range(level):
-                current = queue.popleft()
-                level_traversal.append(current.val)
+            if node.left:
+                helper(node.left, level + 1)
 
-                if current.left:
-                    queue.append(current.left)
-                if current.right:
-                    queue.append(current.right)
+            if node.right:
+                helper(node.right, level + 1)
 
-            traversal.append(level_traversal)
-
+        helper(root, 0)
         return traversal
 
