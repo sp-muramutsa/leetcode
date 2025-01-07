@@ -8,8 +8,8 @@ class Solution:
     def maxDepth(self, root: Optional[TreeNode]) -> int:
         if root is None:
             return 0
-        stack = [(root, 1)]
         res = 1
+        stack = [(root, 1)]
         while stack:
             node, height = stack.pop()
             if node:
