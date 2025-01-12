@@ -8,10 +8,10 @@ class Solution:
     def inorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
         if root is None:
             return []
-        curr = root
         stack = []
         res = []
-        while curr or stack:
+        curr = root
+        while curr is not None or stack:
             while curr:
                 stack.append(curr)
                 curr = curr.left
@@ -19,4 +19,3 @@ class Solution:
             res.append(curr.val)
             curr = curr.right
         return res
-
