@@ -1,13 +1,19 @@
-class Solution(object):
-    def twoSum(self, nums, target):
-        """
-        :type nums: List[int]
-        :type target: int
-        :rtype: List[int]
-        """
+from collections import defaultdict
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
         hashmap = {}
-        for i, n in enumerate(nums):
-            num = target - n
-            if num in hashmap:
-                return [hashmap[num], i]
-            hashmap[n] = i
+        for index, number in enumerate(nums):
+            hashmap[number] = index
+        
+        n = len(nums)
+        print(hashmap)
+
+        for i in range(n):
+            diff = target - nums[i]
+
+            if diff in hashmap and i != hashmap[diff]:
+                return [i, hashmap[diff]]
+                
+            
+
+        
