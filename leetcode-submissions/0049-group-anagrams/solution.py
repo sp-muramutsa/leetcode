@@ -1,27 +1,15 @@
 from collections import defaultdict
-
-
 class Solution:
-
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
-        """
-        Space Complexity:
-        Time Complexity: O(n * k)
-
-        """
-
-        n = len(strs)
+        
         hashmap = defaultdict(list)
 
-        for i in range(n):
+        for word in strs:
             pattern = [0] * 26
-            word = strs[i]
-            m = len(word)
-            for j in range(m):
-                pattern[ord(word[j]) - ord('a')] += 1
-            hashmap[tuple(pattern)].append(word)
-            
-        return list(hashmap.values())
-            
 
-                
+            for char in word:
+                pattern[ord(char) - ord('a')] += 1
+            
+            hashmap[str(pattern)].append(word) 
+        
+        return list(hashmap.values())
