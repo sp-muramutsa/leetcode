@@ -1,39 +1,36 @@
 class Solution:
     def isValidSudoku(self, board: List[List[str]]) -> bool:
 
-        # rows
         for i in range(9):
-            s = set()
+
+            # Horizontal
+            horizontal = set()
+            vertical = set()
             for j in range(9):
-                item = board[i][j]
-                if item in s:
-                    return False
-                elif item != '.':
-                    s.add(item)
-        
-        # columns
-        for i in range(9):
-            s = set()
-            for j in range(9):
-                item = board[j][i]
-                if item in s:
-                    return False
-                elif item != '.':
-                    s.add(item)
-        
-        # 3 by 3 box
-        starts = [(0, 0), (0, 3), (0, 6),
-                  (3, 0), (3, 3), (3, 6),
-                  (6, 0), (6, 3), (6, 6)
-                ]
-        
-        for i, j in starts:
-            s = set()
-            for row in range(i, i+3):
-                for col in range(j, j+3):            
-                    item = board[row][col]
-                    if item in s:
+
+                if board[i][j] != ".":
+                    if board[i][j] in horizontal:
                         return False
-                    elif item != '.':
-                        s.add(item)
+                    horizontal.add(board[i][j])
+
+                # Vertical
+                if board[j][i] != ".":
+                    if board[j][i] in vertical:
+                        return False
+                    vertical.add(board[j][i])
+
+        # 3x3
+        for row in range(0, 9, 3):
+            for col in range(0, 9, 3):
+
+                box = set()
+                for a in range(row, row + 3):
+                    for b in range(col, col + 3):
+
+                        if board[a][b] != ".":
+                            if board[a][b] in box:
+
+                                return False
+                            box.add(board[a][b])
         return True
+
