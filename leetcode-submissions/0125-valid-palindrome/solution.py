@@ -1,23 +1,13 @@
-class Solution(object):
-    def isPalindrome(self, s):
-        """
-        :type s: str
-        :rtype: bool
-        """
+class Solution:
+    def isPalindrome(self, s: str) -> bool:
+        s = "".join(x.lower() for x in s if x.isalnum())
+        l, r = 0, len(s) - 1
 
-        s_alpha = ""
-
-        for char in s:
-            if char.isalnum():
-                s_alpha += char.lower()
-
-        
-        i, j = 0, len(s_alpha) - 1
-
-        while i <= j:
-            if s_alpha[i] != s_alpha[j]:
+        while l <= r:
+            if s[l] != s[r]:
                 return False
-            i += 1
-            j -= 1
+            l += 1
+            r -= 1
+
         return True
-        
+
