@@ -10,31 +10,25 @@ class Solution:
         """
 
         nums.sort()  # Sort the input list to apply two-pointer technique
-        i = 0
-        n = len(nums)
+        i, n = 0, len(nums)
         result = set()  # Use a set to avoid duplicate triplets
 
-        while (
-            i < n and nums[i] <= 0
-        ):  # Since the array is sorted, no need to continue if the current number is greater than 0
-
-            # Use this loop to apply a two sum for numbers on the right of i (cfr Two Sum II)
+        while i < n:
             l, r = i + 1, n - 1
-            while l < r:
-                threesum = nums[l] + nums[r] + nums[i]
 
-                if threesum == 0:
+            while l < r:
+                if nums[i] + nums[l] + nums[r] < 0:
+                    l += 1
+
+                elif nums[i] + nums[l] + nums[r] > 0:
+                    r -= 1
+
+                else:
                     result.add((nums[i], nums[l], nums[r]))
                     l += 1
                     r -= 1
 
-                elif threesum < 0:
-                    l += 1
-
-                elif threesum > 0:
-                    r -= 1
-
             i += 1
 
-        return result
+        return list(result)
 
