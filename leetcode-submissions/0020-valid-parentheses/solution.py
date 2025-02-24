@@ -1,20 +1,21 @@
 class Solution:
     def isValid(self, s: str) -> bool:
-        hashmap = {
+        brackets = {
             ")": "(",
             "}": "{",
             "]": "["
         }
+        
         stack = []
-        for i in s:
-            if stack and i in hashmap:
-                if stack[-1] != hashmap[i]:
-                    return False
-                else:
-                    stack.pop()
+        for char in s:
+            if char in ("(", "{", "["):
+                stack.append(char)
             else:
-                stack.append(i)
-        if not stack:
-            return True
-        else:
-            return False
+                if stack and brackets[char] == stack[-1]:
+                    stack.pop()
+                else:
+                    return False
+        
+        return not stack
+
+        
