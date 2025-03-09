@@ -1,21 +1,24 @@
 class Solution:
-    def search(self, nums: List[int], target: int) -> int:
-        leftmost = 0
-        rightmost = len(nums) - 1
+    # Recursive
+    def search(self, nums: List[int], target: int, l: int = 0, r: int = None) -> int:
+        if r is None:
+            r = len(nums) - 1
+            
+        if l > r:
+            return - 1
+        
+        mid = l + (r-l) // 2
 
-        while leftmost <= rightmost:
-            middle = (leftmost + rightmost) // 2
-            if nums[middle] == target:
-                return middle 
+        if nums[mid] == target:
+            return mid
+        
+        elif nums[mid] < target:
+            return self.search(nums, target, mid + 1, r)
+        
+        else:
+            return self.search(nums, target, l, mid - 1)
+    
+    
+    
 
-
-            # left side
-            elif nums[middle] < target:
-                leftmost = middle + 1
-
-            # right side
-            elif nums[middle] > target:
-                rightmost = middle - 1
-
-        return -1
         
