@@ -1,26 +1,32 @@
 class Solution:
     def productExceptSelf(self, nums: List[int]) -> List[int]:
-        
-        left_multiplier, right_multiplier = 1, 1
+        res = []
+        prefix_product = []
+        current_product = 1
+        for i in range(len(nums)):
+            if i == 0:
+                prefix_product.append(1)
+            else:
+                current_product = current_product * nums[i-1]
+                prefix_product.append(current_product)
+        print(prefix_product )
 
-        n = len(nums)
+
+        suffix_product = []
+        current_product_1 = 1
+        for i in range(len(nums)-1, -1, -1):
+            if i == len(nums)-1:
+                suffix_product.append(1)
+            else:
+                current_product_1 = current_product_1 * nums[i+1]
+                suffix_product.append(current_product_1)
+        suffix_product = suffix_product[-1::-1]
+        print(suffix_product)
+
+        for i in range(len(prefix_product)):
+            res.append(prefix_product[i]*suffix_product[i])
+        return res
         
-        # left
-        left = [0] * n
-        left[0] = 1
-        for i in range(1, n):
-            left[i] = nums[i-1] * left_multiplier
-            left_multiplier = left[i]
         
-        # right
-        right = [0] * n
-        right[-1] = 1
-        for i in range(n-2, -1, -1):
-            right[i] = nums[i+1] * right_multiplier
-            right_multiplier = right[i]
-        
-        # result
-        for i in range(n):
-            nums[i] = left[i] * right[i]
-        
-        return nums
+
+         
