@@ -1,23 +1,35 @@
 class Solution:
     def romanToInt(self, s: str) -> int:
-        romans = {"I": 1, "V": 5, "X": 10, "L": 50, "C": 100, "D": 500, "M": 1000}
-
-        n = len(s)
-        i = n - 1
-        prev = 0
-        curr = 0
-        integer_val = 0
-
-        while i > -1:
-            curr = romans[s[i]]
-            if curr < prev:
-                integer_val -= curr
+        # Symbol       Value
+        #   I             1
+        #   V             5
+        #   X             10
+        #   L             50
+        #   C             100
+        #   D             500
+        #   M             1000
+        res = 0
+        hashmap = {
+            'I': 1,
+            'V': 5,
+            'X': 10,
+            'L': 50,
+            'C': 100,
+            'D': 500,
+            'M': 1000
+        }
+        i = 0
+        while i < len(s):
+            if i < len(s) - 1:
+                if hashmap[s[i]] < hashmap[s[i+1]]:
+                    val = hashmap[s[i+1]] - hashmap[s[i]]
+                    res += val
+                    i += 2
+                else:
+                    res += hashmap[s[i]]
+                    i += 1
             else:
-                integer_val += curr
-            prev = curr
-            i -= 1
-        
-        return integer_val
+                res += hashmap[s[i]]
+                i += 1
+        return res
 
-
-        
