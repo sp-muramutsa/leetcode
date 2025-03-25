@@ -1,28 +1,30 @@
 class Solution:
     def evalRPN(self, tokens: List[str]) -> int:
         stack = []
-        i, n = 0, len(tokens)
-
-        while i < n:
-            if tokens[i] not in ("+", "-", "*", "/"):
-                stack.append(int(tokens[i]))
+        
+        def multiply(x, y):
+            return x * y
+        def subtract(x, y):
+            return y - x
+        def add(x, y):
+            return x + y
+        def divide(x, y):
+            return int(y / x)  
+        
+        hashmap = {
+            '*': multiply,
+            '-': subtract,
+            '+': add,
+            '/': divide
+        }
+        
+        for i in tokens:
+            if i in hashmap:
+                val_1 = int(stack.pop()) 
+                val_2 = int(stack.pop())
+                new_val = hashmap[i](val_1, val_2)
+                stack.append(str(new_val))
             else:
-                # Do the operation between the two elements on the top of the stack and put the result on top of the stack
-                element_2 = stack.pop()
-                element_1 = stack.pop()
-                match tokens[i]:
-                    case "+":
-                        new_result = element_1 + element_2
-                    case "-":
-                        new_result = element_1 - element_2
-                    case "*":
-                        new_result = element_1 * element_2
-                    case "/":
-                        new_result = int(
-                            element_1 / element_2
-                        )  # This is an important trick to round to 0 everytime in Python! Java and C++ and most other languages round to 0 by default.
-                stack.append(new_result)
-            i += 1
-
-        return stack[0]
-
+                stack.append(i)
+        
+        return int(stack[0]) 
