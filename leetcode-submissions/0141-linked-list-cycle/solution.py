@@ -6,16 +6,14 @@
 
 class Solution:
     def hasCycle(self, head: Optional[ListNode]) -> bool:
-        if not head:
-            return False
-        
-        hashmap = set() 
-        
-        curr = head
-        while curr:
-            if curr in hashmap:  
+        #Better way to perform this problem for O(1) space is using slow and fast pointers, once the fast pointer catches up with the slow then that means there is a cycle in our linked list.
+        if head is None:
+            return head
+        slow = head
+        fast = head.next
+        while fast and fast.next:
+            if fast == slow:
                 return True
-            hashmap.add(curr)  
-            curr = curr.next  
-        
-        return False  
+            fast = fast.next.next
+            slow = slow.next
+        return False
