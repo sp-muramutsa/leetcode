@@ -3,11 +3,13 @@ class Solution:
         """
         Do not return anything, modify nums in-place instead.
         """
-        # Bubble sort solution
-
-        length = len(nums)
-        for i in range(length):
-            for j in range(length - i -1):
-                if nums[j] > nums[j + 1]:
-                    nums[j], nums[j + 1] = nums[j +1], nums[j]
-        
+        for i in range(len(nums) - 1):
+            l = 0
+            r = l + 1
+            while l < r and r < len(nums):
+                temp = nums[l]
+                if nums[l] > nums[r]:
+                    nums[l] = nums[r]
+                    nums[r] = temp
+                l += 1
+                r += 1
