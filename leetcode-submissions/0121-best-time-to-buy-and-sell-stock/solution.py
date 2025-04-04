@@ -1,20 +1,13 @@
-class Solution(object):
-    def maxProfit(self, prices):
-        """
-        :type prices: List[int]
-        :rtype: int
-        Keep track of the smallest purchase price. The maximum profit has of course the minimum purchase. So use each index to update the max profit.
-        """
-        l, r = 0, 1
-        n = len(prices)
-        max_profit = 0
-        smallest = prices[l]
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        left, right = 0, 1
+        profit = 0
+        for i in range(len(prices)-1):
+            diff = prices[right] - prices[left]
+            if diff < 0:
+                left = right 
+            
+            right += 1
+            profit = max(profit, diff)
+        return profit
 
-        while r < n:
-            if prices[r] <= smallest:
-                smallest = prices[r]
-            max_profit = max(max_profit, prices[r] - smallest)
-            r += 1
-        
-        return max_profit
-        
