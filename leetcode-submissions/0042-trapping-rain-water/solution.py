@@ -1,24 +1,24 @@
 class Solution:
     def trap(self, height: List[int]) -> int:
-        l, r = 0, len(height) - 1
-
-        max_left, max_right = height[l], height[r]
-
+        if len(height) < 3:
+            return 0
+        
+        n = len(height)
+        left_max = [0] * n
+        right_max = [0] * n
+        
+        left_max[0] = 0  
+        for i in range(1, n):
+            left_max[i] = max(left_max[i-1], height[i-1])
+        
+        right_max[n-1] = 0
+        for i in range(n-2, -1, -1):
+            right_max[i] = max(right_max[i+1], height[i+1])
+        
         water = 0
-        while l < r:
-            if (
-                max_left < max_right
-            ):  # Move the minimum one: This mirrors the behavior of min(max_left, max_right) that the O(n) space solution was using.
-                l += 1
-                max_left = max(max_left, height[l])
-                water += (
-                    max_left - height[l]
-                )  # Pay attention how this can never be negative because we updated max_left first
-
-            else:
-                r -= 1
-                max_right = max(max_right, height[r])
-                water += max_right - height[r]  # Idem au max_left
-
+        for i in range(n):
+            water_level = min(left_max[i], right_max[i])
+            if water_level > height[i]:
+                water += water_level - height[i]
+        
         return water
-
