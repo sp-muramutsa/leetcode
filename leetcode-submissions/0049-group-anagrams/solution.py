@@ -4,7 +4,9 @@ class Solution:
         for i in strs:
             pattern = [0] * 26
             for j in i:
-                num = ord(j) - ord('a')
-                pattern[num] += 1
+                pattern[ord(j) - ord("a")] += 1
             hashmap[tuple(pattern)].append(i)
-        return list(hashmap.values())
+        res = []
+        for i in hashmap.values():
+            res.append(i)
+        return res
