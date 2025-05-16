@@ -1,11 +1,12 @@
 class Solution:
     def strStr(self, haystack: str, needle: str) -> int:
-        length = len(needle)
-        l, r = 0, len(needle) - 1
-        while r <= len(haystack) - 1:
-            if haystack[l:r+1] == needle:
-                return l
+        if len(haystack) < len(needle):
+            return -1
+        left, right = 0, len(needle)-1
+        while right <= len(haystack)-1:
+            if haystack[left:right+1] == needle:
+                return left
             else:
-                l += 1
-                r += 1
+                left += 1
+                right += 1
         return -1
