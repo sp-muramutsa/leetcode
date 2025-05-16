@@ -1,17 +1,18 @@
 class Solution:
     def isValid(self, s: str) -> bool:
-        stack = []
-        hashmap = {
-            ')':'(',
-            '}':'{',
-            ']':'['
+        closing_brackets = {
+            ")":"(",
+            "}":"{",
+            "]":"["
         }
-        if s[0] in hashmap:
-            return False
+        stack = []
         for i in s:
-            if i in hashmap and stack:
-                end_string = stack.pop()
-                if end_string != hashmap[i]:
+            if i in closing_brackets:
+                if stack:
+                    bracket = stack.pop()
+                    if bracket != closing_brackets[i]:
+                        return False
+                else:
                     return False
             else:
                 stack.append(i)
@@ -19,3 +20,4 @@ class Solution:
             return True
         else:
             return False
+
