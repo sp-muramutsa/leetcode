@@ -3,13 +3,21 @@ class Solution:
         """
         Do not return anything, modify nums in-place instead.
         """
-        for i in range(len(nums) - 1):
-            l = 0
-            r = l + 1
-            while l < r and r < len(nums):
-                temp = nums[l]
-                if nums[l] > nums[r]:
-                    nums[l] = nums[r]
-                    nums[r] = temp
+        
+        def swap(i, j):
+            temp = nums[i]
+            nums[i] = nums[j]
+            nums[j] = temp
+
+        l, r, i = 0, len(nums)-1, 0
+        while i <= r:
+            if nums[i] == 0:
+                swap(l, i)
                 l += 1
-                r += 1
+            elif nums[i] == 2:
+                swap(r, i)
+                i -= 1
+                r -= 1
+            i += 1
+
+    
