@@ -7,40 +7,24 @@ class Node:
         self.random = random
 """
 
-
 class Solution:
-    def copyRandomList(self, head: "Optional[Node]") -> "Optional[Node]":
-
-        if not head:
-            return
-
-        # Create clones: A -> A' -> B -> B' -> C -> C'
+    def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
+        hashmap = {None: None}
         curr = head
-        while curr is not None:
-            temp_next = curr.next
-            clone = Node(curr.val)
-            curr.next = clone
-            clone.next = temp_next
-            curr = temp_next
-
-        # Update random in clone
-        curr = head
-        while curr is not None:
-            clone = curr.next
-            clone.random = curr.random.next if curr.random else None  # E
-            curr = curr.next.next
-
-        # Link clones and restore the original list
-        curr = head
-        clone_head = head.next
-        curr_clone = clone_head
-
         while curr:
-            curr.next = curr_clone.next
-            curr_clone.next = curr_clone.next.next if curr_clone.next else None
-
+            hashmap[curr] = Node(curr.val)
             curr = curr.next
-            curr_clone = curr_clone.next
-
-        return clone_head
+        
+        curr = head
+        new = Node(0)
+        count = 0
+        while curr:
+            copy = hashmap[curr]
+            if count == 0:
+                new.next = copy
+            copy.next = (hashmap[curr.next])
+            copy.random = (hashmap[curr.random])
+            count += 1
+            curr = curr.next
+        return new.next
 
