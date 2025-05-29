@@ -1,52 +1,42 @@
-class Node:
+class ListNode:
 
-    def __init__(self, key: int, val: int):
+    def __init__(self, key, val):
         self.key = key
         self.val = val
-        self.next = None
         self.prev = None
+        self.next = None
 
 
 class LRUCache:
 
     def __init__(self, capacity: int):
-
         self.capacity = capacity
-        self.cache = {}
+        self.cache = {}  # key : node
 
-        # Left = LRU, Right= MRU
-        self.left, self.right = Node(0, 0), Node(0, 0)
-        self.left.next = self.right
-        self.right.prev = self.left
+        # Left = LRU and Right = MRU
+        self.left = ListNode(0, 0)
+        self.right = ListNode(0, 0)
+        self.left.next, self.right.prev = (
+            self.right,
+            self.left,
+        )  # They point at each other initally
 
-    def remove_from_list(self, node):
-        prev = node.prev
-        nxt = node.next
+    def remove_from_list(self, node: Optional[ListNode]) -> None:
+        prev, nxt = node.prev, node.next
+        prev.next, nxt.prev = nxt, prev
 
-        prev.next = nxt
-        nxt.prev = prev
-
-    def insert_in_list(self, node):
-
-        prev = self.right.prev
-
-        self.right.prev = node
-        node.next = self.right
-        node.prev = prev
-        prev.next = node
+    def insert_in_list(self, node: Optional[ListNode]) -> None:
+        right = self.right
+        mru = self.right.prev
+        mru.next, node.prev = node, mru
+        node.next, self.right.prev = right, node
 
     def get(self, key: int) -> int:
-
         if key in self.cache:
             node = self.cache[key]
-
-            # Delete the node from the linked list
             self.remove_from_list(node)
-
-            # Re insert it as the MRU
             self.insert_in_list(node)
-
-            return self.cache[key].val
+            return node.val
 
         return -1
 
@@ -54,24 +44,16 @@ class LRUCache:
 
         if key in self.cache:
             node = self.cache[key]
-            node.val = value
-
-            # Delete the node from the linked list
             self.remove_from_list(node)
-
-            # Re insert it as the MRU
+            node.val = value
             self.insert_in_list(node)
-
-        else:
-            node = Node(key, value)
-
-            # Insert it in hashmap
             self.cache[key] = node
 
-            # Insert the it in linked list
-            self.insert_in_list(node)
+        else:
+            new_node = ListNode(key, value)
+            self.cache[key] = new_node
+            self.insert_in_list(new_node)
 
-            # Check for overflow
             if len(self.cache) > self.capacity:
                 lru = self.left.next
                 self.remove_from_list(lru)
