@@ -5,56 +5,40 @@
 #         self.next = next
 class Solution:
 
-    def reverseLinkedList(self, head, k):
+    def getKth(self, curr, k):
+        temp = curr
 
-        # First, check if there are at least k nodes
-        temp = head
         for _ in range(k):
-            if not temp:
-                return -1
-            temp = temp.next
+            if temp:
+                temp = temp.next
 
-        prev, curr = None, head
-        newGroupHead = prev
-        newGroupTail = head
-        n = 0
-        while curr and n < k:
-            temp = curr.next
-
-            if n == k - 1:
-                newCurr = temp
-            curr.next = prev
-            prev = curr
-            curr = temp
-            n += 1
-
-        newGroupHead = prev
-        return (newGroupHead, newGroupTail, newCurr)
+        return temp
 
     def reverseKGroup(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
-    
 
         dummy = ListNode(0, head)
         groupPrev = dummy
-        curr = dummy.next
 
-        while curr:
-            # Reverse happened
-            res = self.reverseLinkedList(curr, k)
-            if res != -1:
-                newHead, newTail, newCurr = res
-                groupPrev.next = newHead
-                groupPrev = newTail
-                curr = newCurr
+        while True:
+            kth = self.getKth(groupPrev, k)
+            if not kth:
+                break
 
-            else:
-               break
-        
-       
-        temp = dummy
-        while temp.next:
-            temp = temp.next
-        temp.next = curr
+            groupNext = kth.next
+
+            # Reverse
+            prev, curr = None, groupPrev.next
+            for _ in range(k):
+                temp = curr.next
+                curr.next = prev
+                prev = curr
+                curr = temp
+
+            # Reconnect the linked list
+            tail = groupPrev.next
+            groupPrev.next = kth
+            tail.next = groupNext
+            groupPrev = tail
 
         return dummy.next
 
