@@ -5,15 +5,21 @@
 #         self.left = left
 #         self.right = right
 class Solution:
+    # DFS Solution
     def maxDepth(self, root: Optional[TreeNode]) -> int:
-        if root is None:
-            return 0
-        res = 1
-        stack = [(root, 1)]
-        while stack:
-            node, height = stack.pop()
-            if node:
-                res = max(res, height)
-                stack.append((node.right, height+1))
-                stack.append((node.left, height+1))
-        return res
+
+        q = [root] if root is not None else None
+        height = 0
+
+        while q:
+            height += 1
+            children = []
+            for node in q:
+                if node.left:
+                    children.append(node.left)
+                if node.right:
+                    children.append(node.right)
+            q = children
+
+        return height
+
