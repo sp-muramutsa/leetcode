@@ -5,22 +5,27 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def __init__(self):
-        self.traversal = []
     def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
-        if root is None:
+
+        if not root:
             return []
-        q = deque([root])
+
+        traversal = []
+        q = [root]
+
         while q:
-            res = []
-            for i in range(len(q)):
-                node = q.popleft()
-                if node:
-                    res.append(node.val)
-                    if node.left:
-                        q.append(node.left)
-                    if node.right:
-                        q.append(node.right)
-            self.traversal.append(res)
-        return self.traversal
-            
+            temp = []
+            for node in q:
+                temp.append(node.val)
+            traversal.append(temp)
+
+            children = []
+            for node in q:
+                if node.left:
+                    children.append(node.left)
+                if node.right:
+                    children.append(node.right)
+            q = children
+
+        return traversal
+
