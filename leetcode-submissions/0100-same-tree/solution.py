@@ -6,20 +6,18 @@
 #         self.right = right
 class Solution:
     def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
-        l = []
-        m = []
-        def dfs(root, h):
-            if root is None:
-                return 
-            left = dfs(root.left, h)
-            h.append(left.val if left else None)
-            h.append(root.val)
-            right = dfs(root.right, h)
-            h.append(right.val if right else None)
-        dfs(p, l)
-        dfs(q, m)
-        print(m)
-        print(l)
-        if m == l:
+        
+        # If both nodes are None, they are identical
+        if p is None and q is None:
             return True
-        return False
+        
+        # If only one is None, they are not identical
+        if p is None or q is None:
+            return False
+        
+        # Recursively check if the left and the right sides of both trees are identical
+        if p.val == q.val:
+            return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
+        else:
+            return False # If their values are not identical why even bother.
+
