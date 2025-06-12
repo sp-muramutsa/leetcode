@@ -1,18 +1,13 @@
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
-        if not s:
-            return 0
-        
-        hashset = set()
-        answer = 0
         l = 0
-        
+        res = 0
+        duplicates = set()
         for r in range(len(s)):
-            while s[r] in hashset:
-                hashset.remove(s[l])
+            while s[r] in duplicates:
+                duplicates.remove(s[l])
                 l += 1
-            
-            hashset.add(s[r])
-            answer = max(answer, len(hashset))
-        
-        return answer
+            duplicates.add(s[r])
+            res = max(res, len(duplicates))
+        return res
+
