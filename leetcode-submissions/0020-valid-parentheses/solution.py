@@ -9,13 +9,13 @@ class Solution:
         for i in s:
             if i in hashmap:
                 if len(stack) != 0:
-                    new = stack.pop()
-                    if new != hashmap[i]:
+                    if stack.pop() != hashmap[i]:
                         return False
                 else:
                     return False
             else:
                 stack.append(i)
-        if len(stack) == 0:
-            return True
-        return False
+        if len(stack) != 0:
+            return False
+        return True
+            
