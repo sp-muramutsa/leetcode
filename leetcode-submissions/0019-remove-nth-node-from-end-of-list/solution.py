@@ -6,26 +6,22 @@
 class Solution:
     def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
 
-        dummy = ListNode(0)
-        dummy.next = head
+        dummy = ListNode(next=head)
         slow = fast = dummy
 
-        # Move fast n steps
+        # Fast walks n steps
         for i in range(n):
             fast = fast.next
 
-        # Move both pointers till fast is at the tail. slow will be at n.
-        prev = slow
+        # Both Slow and Fast walk till Fast reaches the end
+        prev, slow = None, slow
         while fast is not None:
+            fast = fast.next
             prev = slow
             slow = slow.next
-            fast = fast.next
 
-        # Remove nth node and return
-        if slow.next:
-            prev.next = slow.next
-        else:
-            prev.next = None
+        # Now we know Slow is n steps from the end of the list: We can remove the node Slow
+        prev.next = slow.next
 
         return dummy.next
 
