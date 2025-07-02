@@ -6,20 +6,28 @@
 class Solution:
     def oddEvenList(self, head: Optional[ListNode]) -> Optional[ListNode]:
 
-        if head is None or head.next is None:
+        if not head or not head.next:
             return head
 
-        odd = head
-        even = head.next
-        even_head = even
+        odd_tail = head  
+        even_head = even_tail = head.next
 
-        while even and even.next:
-            odd.next = even.next
-            odd = odd.next
+        i, curr = 3, even_head.next
 
-            even.next = odd.next
-            even = even.next
+        while curr is not None:
+            if i % 2 == 0:
+                even_tail.next = curr
+                even_tail = even_tail.next
 
-        odd.next = even_head
+            else:
+                odd_tail.next = curr
+                odd_tail = odd_tail.next
+
+            curr = curr.next
+            i += 1
+
+        even_tail.next = None
+        odd_tail.next = even_head
+
         return head
 
