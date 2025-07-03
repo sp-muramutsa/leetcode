@@ -1,20 +1,16 @@
 class Solution:
-    def carFleet(self, target: int, position: List[int], speed: List[int]) -> int: 
+    def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
 
-        n = len(position)
-        position_speed = [(position[i], speed[i]) for i in range(n)]
-        position_speed.sort()
-        time = [(target-position_speed[i][0]) / position_speed[i][1] for i in range(n)]
-        time = list(reversed(time))
+        cars = sorted(zip(position, speed), reverse=True)
+        arrival_times = [(target - pos) / speed for pos, speed in cars]
 
         stack = []
-        for t in time:
+
+        for t in arrival_times:
             stack.append(t)
-            if len(stack) >= 2 and stack[-1] <= stack[-2]:
+
+            if len(stack) >= 2 and stack[-2] >= stack[-1]:
                 stack.pop()
-        
+
         return len(stack)
-        
-        
-            
-        
+
