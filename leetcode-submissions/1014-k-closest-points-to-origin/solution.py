@@ -1,27 +1,21 @@
+import heapq
 class Solution:
     def kClosest(self, points: List[List[int]], k: int) -> List[List[int]]:
-        distances = {}
-        length = len(points)
+        # Create a min heap and make it a tuple first element in tuple as Euclidian distance
+        if not points:
+            return []
+        heap = []
+        for i in points:
+            distance = sqrt((i[0]**2) + (i[1]**2))
+            heapq.heappush(heap, (distance, i))
 
-        for i in range(length):
-            x_squared = (points[i][0]) ** 2
-            y_squared = (points[i][1]) ** 2
-            distances[i] = sqrt(x_squared + y_squared)
-             
-        distances = sorted(distances.items(), key=lambda x:x[1])
-        
-        closest_distances = []
-
-        for j in range(k):
-            index = distances[j][0]
-            closest_distances.append(points[index])
-        
-        return closest_distances
-
-
-        
-
-        
-    
-
-        
+        # Create a result list
+        result = []
+        # Pop from the list in the range k
+        i = 0
+        while i < k and heap:
+            result.append(heapq.heappop(heap)[1])
+            i += 1
+            
+        # Return the result
+        return result
