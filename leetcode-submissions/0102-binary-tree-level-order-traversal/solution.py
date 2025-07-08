@@ -4,33 +4,31 @@
 #         self.val = val
 #         self.left = left
 #         self.right = right
-from collections import deque
 class Solution:
     def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
-        # Using BFS to solve this problem
-        # Edge case: the root node might be empty, we return []
-        if root is None:
+
+        if not root:
             return []
-        # Define our result list that stores lists of values at each level of the tree
-        result = []
-        # Define a queue to store nodes
-        queue = deque()
-        # Add the root node
-        queue.append(root)
-        # While queue 
-        while queue:
-            # get the length of the queue
-            length = len(queue)
-            # Define the array for the level
-            arr = []
-            # Iterate the length of level
-            for i in range(length):
-                node = queue.popleft()
-                # Pop the queue and add the val and add the left and then right if available
-                arr.append(node.val)
+
+        dq = collections.deque([root])
+        traversal = []
+
+        while dq:
+            level = []
+
+            k = len(dq)
+            for i in range(k):
+
+                node = dq.popleft()
+                level.append(node.val)
+
                 if node.left:
-                    queue.append(node.left)
+                    dq.append(node.left)
+
                 if node.right:
-                    queue.append(node.right)
-            result.append(arr)
-        return result
+                    dq.append(node.right)
+
+            traversal.append(level)
+
+        return traversal
+
