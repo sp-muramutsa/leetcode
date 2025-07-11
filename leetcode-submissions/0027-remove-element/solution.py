@@ -1,35 +1,50 @@
 class Solution:
     def removeElement(self, nums: List[int], val: int) -> int:
 
-        """
-        Two pointer solution
-        The tripping solution was returning the wrong k!!!!!
-        """
+        # A pointer p1 to keep track of the indices to insert in: l
+        # A pointer p2 to keep track of the candidates: r
+        # Iterate while r < n:
+        #   if nums[l] == val:
+        # while nums[r] == val:
+        # r += 1
+        # nums[l] = nums[r]
+        # nums[r] = val
+        # l += 1
+        # r += 1
+        #   else:
+        #       l += 1
+        #       r += 1
 
-        length = len(nums)
-        l, r = 0, length - 1
-        while l < r:
-            if nums[l] == val and nums[r] == val:
-                nums[r] = val
-                r -= 1
- 
-            
-            elif nums[l] == val and nums[r] != val:
-                nums[l] = nums[r]
-                nums[r] = val
-                l += 1
-       
-            
-            elif nums[l] != val:
-                l += 1
+        # [0, 1, 2, 2, 3, 0, 4, 2]
+        # [0, 1, 3, 2, 2, 0, 4, 2]
+        # [0, 1, 3, 0, 2, 2, 4, 2]
+        # [0, 1, 3, 0, 4, 2, 2, 2]
+        #                 l,    r
+        # return l + 1
 
-        x = 0
-        for j in range(length - 1, -1, -1):
-            if nums[j] == val:
-                x += 1
-                nums[j] = "_"
+        n = len(nums)
+        if n == 1:
+            if val == nums[0]:
+                return 0
             else:
-                break
+                return 1
 
-        k = length - x
-        return k
+        l, r = 0, 0
+
+        while r < n:
+            if nums[l] == val:
+                if nums[r] == val:
+                    r += 1
+
+                else:
+                    nums[l] = nums[r]
+                    nums[r] = val
+                    l += 1
+                    r += 1
+
+            else:
+                l += 1
+                r += 1
+
+        return l
+
