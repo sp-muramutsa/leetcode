@@ -3,23 +3,20 @@ class Solution:
         """
         Do not return anything, modify nums1 in-place instead.
         """
-        if n == 0:
-            return
 
-        i = 0
-        j = 0
-        while i < m + n and j < n:
-            if nums1[i] < nums2[j]:
-                pass
+        p1 = m - 1
+        p2 = n - 1
+        i = m + n - 1
+
+        while p2 >= 0:
+
+            if p1 >= 0 and nums1[p1] >= nums2[p2]:
+                nums1[i] = nums1[p1]
+                p1 -= 1
+
             else:
-                nums1.insert(i, nums2[j])
-                nums1.pop()
-                j += 1
-            i += 1    
+                nums1[i] = nums2[p2]
+                p2 -= 1
 
-        # Fill out the remaining zeros
-        if 0 in nums1:
-            remainder = n-j
-            if remainder > 0:
-                nums1[-remainder:] = nums2[-remainder:]
-        
+            i -= 1
+
