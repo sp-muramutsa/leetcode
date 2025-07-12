@@ -1,28 +1,14 @@
-class Solution(object):
-    def moveZeroes(self, nums):
+class Solution:
+    def moveZeroes(self, nums: List[int]) -> None:
         """
-        :type nums: List[int]
-        :rtype: None Do not return anything, modify nums in-place instead.
-        Intuition: Move non-zeros then move zeros after
+        Do not return anything, modify nums in-place instead.
         """
 
         n = len(nums)
+        last_non_zero = 0
 
-        i = 0
-        for number in nums:
-            if number != 0:
-                nums[i] = number
-                i += 1
-        
-        j = n - i
-        for k in range(1, j+1):
-            nums[-k] = 0
-
-        
-        
-        
-
-
-
-
+        for i in range(n):
+            if nums[i] != 0:
+                nums[last_non_zero], nums[i] = nums[i], nums[last_non_zero]
+                last_non_zero += 1
 
