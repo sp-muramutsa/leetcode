@@ -2,19 +2,21 @@ class Solution:
     def permute(self, nums: List[int]) -> List[List[int]]:
 
         n = len(nums)
-        solution, path = [], []
+        solution= []
 
-        def backtrack(i):
-            if len(path) == n:
-                solution.append(path.copy())
+        def backtrack(nums_used, path):
+            if nums_used == n:
+                solution.append(path[:])
                 return
 
-            for num in nums:
-                if num not in path:
-                    path.append(num)
-                    backtrack(num)
-                    path.pop()
+            for j in range(n):
+                if nums[j] in path:
+                    continue
+                
+                path.append(nums[j])
+                backtrack(nums_used + 1, path)
+                path.pop()
 
-        backtrack(1)
+        backtrack(0, [])
         return solution
 
