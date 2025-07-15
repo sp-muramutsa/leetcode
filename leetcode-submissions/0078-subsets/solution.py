@@ -2,28 +2,21 @@ class Solution:
     def subsets(self, nums: List[int]) -> List[List[int]]:
 
         n = len(nums)
-        solution, path = [], []
+        solution = []
 
-        def backtrack(i):
-           
+        def backtrack(i, path):     
+            
+            solution.append(path[:])
+            
             if i == n:
-                solution.append(path.copy())
                 return
             
-            # Don't pick nums[i+1]
-            backtrack(i + 1)
-
-            # Pick nums[i]
-            path.append(nums[i])
-            backtrack(i + 1)
-            path.pop()
+            for j in range(i, n):
+                path.append(nums[j])
+                backtrack(j + 1, path)
+                path.pop()
         
-        backtrack(0)
-
-        # Time: O(2 ** n)
-        # Space: space for the answer. O(2 ** n)
-        # Recursion depth space: O(n )
-
+        backtrack(0, [])
         return solution
 
 
