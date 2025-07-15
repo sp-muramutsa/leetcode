@@ -1,24 +1,18 @@
 class Solution:
     def combine(self, n: int, k: int) -> List[List[int]]:
-        
-        solution, path = [], []
-        
-        def backtrack(i):
 
-            if i == n + 1: 
-                if len(path) == k:
-                    solution.append(path.copy())
+        solution = []
+
+        def backtrack(i, nums_used, path):
+            if nums_used == k:
+                solution.append(path[:])
                 return
-            
-            backtrack(i + 1)
 
-            path.append(i)
-            backtrack(i + 1)
-            path.pop()
-        
-        backtrack(1)
+            for j in range(i, n + 1):
+                path.append(j)
+                backtrack(j + 1, nums_used + 1, path)
+                path.pop()
+
+        backtrack(1, 0, [])
         return solution
-
-        
-       
 
