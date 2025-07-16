@@ -1,0 +1,22 @@
+name: LeetCode Sync for Sandrin
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 8 * * 6"  # Every Saturday at 8 AM UTC
+
+jobs:
+  sync-leetcode:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run Custom LeetCode Sync
+        uses: sp-muramutsa/leetcode-sync@main
+        with:
+          github-token: ${{ github.token }}
+          leetcode-csrf-token: ${{ secrets.LEETCODE_CSRF_TOKEN }}
+          leetcode-session: ${{ secrets.LEETCODE_SESSION }}
+          destination-folder: leetcode
+          language: python
+          verbose: true
+          commit-header: '[LeetCode Sync] Sandrin'
