@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Run Custom LeetCode Sync
-        uses: sp-muramutsa/leetcode-sync@main
+        uses: sp-muramutsa/leetcode-sync@master
         with:
           github-token: ${{ github.token }}
           leetcode-csrf-token: ${{ secrets.LEETCODE_CSRF_TOKEN }}
