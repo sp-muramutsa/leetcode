@@ -1,6 +1,5 @@
 class Solution:
     def letterCombinations(self, digits: str) -> List[str]:
-
         hashmap = {
             "1": "",
             "2": "abc",
@@ -13,35 +12,21 @@ class Solution:
             "9": "wxyz",
         }
 
-        solution, path = [], []
-
-        chars = [char for char in digits]
-
-        n = len(chars)
+        solution = []
         k = len(digits)
+        if k == 0:
+            return []
 
-        def get_neighbors(idx):
-            neighbors = set()
-            for j in range(idx + 1, n):
-                for char in hashmap[chars[j]]:
-                    neighbors.add((j, char))
-
-            return neighbors
-
-        def backtrack(i):
-            if len(path) == k and path:
+        def backtrack(i, path):
+            if i == k:
                 solution.append("".join(path))
                 return
 
-            if i == n:
-                return
-
-            for neighbor in get_neighbors(i):
-                idx, char = neighbor
+            for char in hashmap[digits[i]]:
                 path.append(char)
-                backtrack(idx)
+                backtrack(i + 1, path)
                 path.pop()
 
-        backtrack(-1)
+        backtrack(0, [])
         return solution
 
