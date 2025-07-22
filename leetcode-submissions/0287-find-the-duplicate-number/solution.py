@@ -1,19 +1,27 @@
 class Solution:
     def findDuplicate(self, nums: List[int]) -> int:
 
-        slow, fast = 0, 0
+        # [1, 3, 4, 2, 2]
+        # [1, 2, 3, 4, 5]
+        # [1, 3, 4, 5, 6]
+        # [T, F, F, F, F]
+        # return first False
 
-        while True:
-            slow = nums[slow]
-            fast = nums[nums[fast]]  # Fast goes twice as slow
-            if slow == fast:  # Found an intersection
-                break
+        def less_or_equal_count(number: int) -> bool:
+            count = 0
+            for x in nums:
+                if x <= number:
+                    count += 1
+            return count <= number
 
-        # Now take slow back to the start and move both pointers at the same pace of +1
-        slow = 0
-        while slow != fast:
-            slow = nums[slow]
-            fast = nums[fast]
+        n = len(nums)
+        l, r = 0, n
+        while l < r:
+            mid = l + (r - l) // 2
+            if less_or_equal_count(mid):
+                l = mid + 1
+            else:
+                r = mid
 
-        return slow
+        return l
 
