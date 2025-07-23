@@ -9,17 +9,22 @@ class Solution:
 
         self.balance = True
 
-        def helper(root):
-            if not root:
+        def helper(node):
+            """
+            Calculates the depth of two subtrees of the same node
+            and checks if they differ by more than one node.
+            """
+
+            if not node:
                 return 0
 
-            left = helper(root.left)
-            right = helper(root.right)
+            left_depth = helper(node.left)
+            right_depth = helper(node.right)
 
-            if abs(left - right) > 1:
+            if abs(left_depth - right_depth) > 1:
                 self.balance = False
 
-            return max(left, right) + 1
+            return 1 + max(left_depth, right_depth)
 
         helper(root)
         return self.balance
