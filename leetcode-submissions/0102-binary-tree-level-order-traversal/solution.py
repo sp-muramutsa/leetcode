@@ -10,25 +10,26 @@ class Solution:
         if not root:
             return []
 
-        dq = collections.deque([root])
-        traversal = []
+        levels = []
 
-        while dq:
-            level = []
+        def traverse(node, level):
 
-            k = len(dq)
-            for i in range(k):
+            if not node:
+                return
 
-                node = dq.popleft()
-                level.append(node.val)
+            if level == len(levels):
+                levels.append([])
 
-                if node.left:
-                    dq.append(node.left)
+            levels[level].append(node.val)
+            traverse(node.left, level + 1)
+            traverse(node.right, level + 1)
 
-                if node.right:
-                    dq.append(node.right)
+        traverse(root, 0)
+        return levels
 
-            traversal.append(level)
-
-        return traversal
+        #     1
+        #    / \
+        #   2   3
+        #  / \
+        # 4   5
 
