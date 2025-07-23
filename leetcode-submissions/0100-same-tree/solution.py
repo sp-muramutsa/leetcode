@@ -6,16 +6,25 @@
 #         self.right = right
 class Solution:
     def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
-        # Edge cases where one tree can be empty, return False 
-        if (p is None and q is not None) or (p is not None and q is None):
-            return False
-        if p is None and q is None:
-            return True
-        # If the the values are differrent we return False 
-        if p.val != q.val:
-            return False
-        # Traverse the left
-        left = self.isSameTree(p.left, q.left)
-        # Traverse the right
-        right = self.isSameTree(p.right, q.right)
-        return (left and right)
+
+        self.same = True
+
+        def preorder(node1, node2):
+
+            if not node1 and not node2:
+                return
+
+            if not node1 or not node2:
+                self.same = False
+                return
+
+            if node1.val != node2.val:
+                self.same = False
+                return
+
+            preorder(node1.left, node2.left)
+            preorder(node1.right, node2.right)
+
+        preorder(p, q)
+        return self.same
+
