@@ -6,14 +6,23 @@
 #         self.right = right
 class Solution:
     def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
-        # Edge cases if our root is None, we return None
-        if root is None:
+
+        # Iterative
+        if not root:
             return root
-        # Traverse our binary tree using dfs method
-        # Keep the left node as a temp variable
-        tmp = self.invertTree(root.left)
-        # Set the left to the traversed right side
-        root.left = self.invertTree(root.right) 
-        # set the right to left
-        root.right = tmp
+
+        stack = [root]
+
+        while stack:
+            
+            node = stack.pop()
+            
+            if node:
+                node.left, node.right = node.right, node.left       
+                stack.append(node.left)
+                stack.append(node.right)
+            
         return root
+
+
+
