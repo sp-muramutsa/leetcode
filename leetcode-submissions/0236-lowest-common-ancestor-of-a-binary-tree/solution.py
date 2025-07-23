@@ -5,35 +5,47 @@
 #         self.left = None
 #         self.right = None
 
-
 class Solution:
-    def lowestCommonAncestor(self, root: "TreeNode", p: "TreeNode", q: "TreeNode") -> "TreeNode":
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        
+        # Traverse with dfs till we reach p. keep its ancestors
+        # Traverse with dfs till we reach q. keep its ancestors
+        # Find the LCA in the ancestors list
 
-        self.ancestors = [p]
-
-        def getAncestors(root, target) -> list:
-
-            if root is None:
+        def get_ancestors(root, target, path):
+            
+            # Terminal
+            if not root:
                 return False
-
-            if root.val == target.val:
+            
+            # Goal
+            path.append(root)
+            if root == target:
                 return True
-
-            # Either of the branches contain the target
-            if getAncestors(root.left, target) or getAncestors(root.right, target):
-                self.ancestors.append(root)
+            
+            # Recursive
+            if get_ancestors(root.left, target, path):
                 return True
+        
+            
+            if get_ancestors(root.right, target, path):
+                return True
+            
+            path.pop()     
+            
+        
+        p_ancestors = []
+        get_ancestors(root, p, p_ancestors)
+        
+        q_ancestors = []
+        get_ancestors(root, q, q_ancestors)
 
-            return False
-
-        getAncestors(root, p)
-        p_ancestors = self.ancestors
-
-        self.ancestors = [q]
-        getAncestors(root, q)
-        q_ancestors = set(self.ancestors)
-
-        for x in p_ancestors:
-            if x in q_ancestors:
-                return x
-
+      
+        seen = set(q_ancestors)
+        i = len(p_ancestors) - 1
+        
+        while i >= 0:
+            if p_ancestors[i] in seen:
+                return p_ancestors[i]
+            i -= 1
+           
