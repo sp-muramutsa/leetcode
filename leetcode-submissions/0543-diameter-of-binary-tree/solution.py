@@ -5,22 +5,24 @@
 #         self.left = left
 #         self.right = right
 class Solution:
+
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
 
-        self.diameter = 0
+        diameter = 0
 
-        def getHeight(node):
-            global diameter
-
-            if node is None:
+        def max_depth(node):
+            if not node:
                 return 0
 
-            left = getHeight(node.left)
-            right = getHeight(node.right)
-            self.diameter = max(self.diameter, left + right)
+            left_depth = max_depth(node.left)
+            right_depth = max_depth(node.right)
 
-            return max(left, right) + 1
+            nonlocal diameter
+            diameter = max(diameter, left_depth + right_depth)
 
-        getHeight(root)
-        return self.diameter
+            return 1 + max(left_depth, right_depth)
+
+        max_depth(root)
+
+        return diameter
 
