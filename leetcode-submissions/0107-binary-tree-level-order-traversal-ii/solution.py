@@ -4,31 +4,31 @@
 #         self.val = val
 #         self.left = left
 #         self.right = right
-
-# Same solution for I but insert at the start
-from collections import deque
-
-
 class Solution:
     def levelOrderBottom(self, root: Optional[TreeNode]) -> List[List[int]]:
-        traversal = []
+        
         if not root:
-            return traversal
+            return []
+
         q = deque([root])
+        traversal = []
 
         while q:
-            level = len(q)
-            level_traversal = []
 
-            for _ in range(level):
-                current = q.popleft()
-                level_traversal.append(current.val)
-                if current.left:
-                    q.append(current.left)
-                if current.right:
-                    q.append(current.right)
+            level = []
+            k = len(q)
 
-            traversal.insert(0, level_traversal)
+            for _ in range(k):
+                node = q.pop()
+                level.append(node.val)
 
-        return traversal
+                if node.left:
+                    q.appendleft(node.left)
+
+                if node.right:
+                    q.appendleft(node.right)
+
+            traversal.append(level)
+
+        return traversal[::-1]
 
