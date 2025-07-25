@@ -7,22 +7,28 @@
 class Solution:
     def maxPathSum(self, root: Optional[TreeNode]) -> int:
 
-        max_sum = [float("-inf")]
+        # max path of a node is obtained by extending either the left branch or the right branch
+        # we only care about positive values
+        # We can only split the path once.
+
+        self.max_sum = float("-inf")
 
         def dfs(node):
+            "Post order"
+
             if not node:
                 return 0
 
-            left = dfs(node.left)
-            max_left = max(0, left)
+            left_sum = dfs(node.left)
+            right_sum = dfs(node.right)
 
-            right = dfs(node.right)
-            max_right = max(0, right)
+            max_left_sum = max(left_sum, 0)
+            max_right_sum = max(right_sum, 0)
 
-            max_sum[0] = max(max_sum[0], node.val + max_left + max_right)
+            self.max_sum = max(self.max_sum, node.val + max_left_sum + max_right_sum)
 
-            return node.val + max(max_left, max_right)
+            return node.val + max(max_left_sum, max_right_sum)
 
         dfs(root)
-        return max_sum[0]
+        return self.max_sum
 
