@@ -4,35 +4,40 @@ class Solution:
         A, B = nums1, nums2
 
         if len(A) > len(B):
-            B, A = A, B
+            A, B = B, A
 
-        lenA, lenB = len(A), len(B)
-        total = lenA + lenB
+        n1, n2 = len(A), len(B)
+        total = n1 + n2
         half = total // 2
 
-        l, r = 0, lenA - 1
+        lA, rA = 0, n1 - 1
 
         while True:
-            mid1 = l + (r - l) // 2
-            mid2 = half - mid1 - 2
 
-            AMid = A[mid1] if mid1 >= 0 else float("-inf")
-            APostMid = A[mid1 + 1] if (mid1 + 1) < lenA else float("inf")
+            mA = lA + (rA - lA) // 2
+            mB = half - mA - 2
 
-            BMid = B[mid2] if mid2 >= 0 else float("-inf")
-            BPostMid = B[mid2 + 1] if (mid2 + 1) < lenB else float("inf")
+            midA = A[mA] if mA >= 0 else float("-inf")
+            post_midA = A[mA + 1] if (mA + 1) < n1 else float("inf")
 
-            # Correct partition
-            if AMid <= BPostMid and BMid <= APostMid:
+            midB = B[mB] if 0 <= mB else float("-inf")
+            post_midB = B[mB + 1] if (mB + 1) < n2 else float("inf")
+
+            if midA <= post_midB and midB <= post_midA:
+                # Even
+                if total % 2 == 0:
+                    left = max(midA, midB)
+                    right = min(post_midA, post_midB)
+
+                    return (left + right) / 2
+
                 # Odd
-                if total % 2 == 1:
-                    return min(APostMid, BPostMid)
                 else:
-                    return (max(AMid, BMid) + min(APostMid, BPostMid)) / 2
+                    return min(post_midA, post_midB)
 
-            # Too many values from A
-            elif AMid > BPostMid:
-                r = mid1 - 1
+            elif midA > post_midB:
+                rA = mA - 1
+
             else:
-                l = mid1 + 1
+                lA = mA + 1
 
