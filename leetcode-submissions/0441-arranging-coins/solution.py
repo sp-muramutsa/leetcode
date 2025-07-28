@@ -1,16 +1,20 @@
 class Solution:
-    def arrangeCoins(self, n: int) -> int:
-        
-        
-        # k * (k + 1)) // 2 <= n
-        # k ** 2 + k <= 2n
-        # 2n >= k ** 2 + k
-        # 2n >= (k + 0.5) ** 2 - 0.25
-        # 2n + 0.25 >= (k + 0.5) ** 2
-        # sqrt(2n + 0.25) - 0.5 >= k
-        # 
+    def gaussian_sum(self, k) -> int:
+        return (k * (k + 1)) // 2
 
-        k = sqrt(2 * n + 0.25) - 0.5
-        return floor(k)
-        
-        
+    def arrangeCoins(self, n: int) -> int:
+
+        if n == 1:
+            return n
+
+        l, r = 1, n
+
+        while l < r:
+            mid = l + (r - l) // 2
+            if self.gaussian_sum(mid) <= n:
+                l = mid + 1
+            else:
+                r = mid
+
+        return l - 1
+
