@@ -6,25 +6,27 @@
 #         self.right = right
 class Solution:
 
-    def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
-        def level_order(queue):
-            nodes = []
-            while queue:
-                children = []
-                for node in queue:
-                    nodes.append(node.val if node else None)
-                    if node:
-                        children.append(node.left)
-                        children.append(node.right)
+    def is_same_tree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
 
-                queue = children
+        same = True
 
-            return nodes
+        def dfs(p, q):
+            if not p and not q:
+                return
 
-        p_list = level_order([p])
-        q_list = level_order([q])
+            nonlocal same
+            if not p or not q:
+                same = False
+                return
 
-        return p_list == q_list
+            if p.val != q.val:
+                same = False
+
+            dfs(p.left, q.left)
+            dfs(p.right, q.right)
+
+        dfs(p, q)
+        return same
 
     def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
 
@@ -34,9 +36,10 @@ class Solution:
             if not node:
                 return
 
-            if node.val == subRoot.val:
-                if self.isSameTree(node, subRoot):
-                    self.same = True
+            print(node.val, self.is_same_tree(node, subRoot))
+            if self.is_same_tree(node, subRoot):
+                self.same = True
+                return
 
             dfs(node.left)
             dfs(node.right)
