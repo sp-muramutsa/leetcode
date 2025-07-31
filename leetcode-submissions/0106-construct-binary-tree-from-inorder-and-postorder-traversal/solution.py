@@ -9,6 +9,7 @@ class Solution:
 
         n = len(postorder)
         self.i = n - 1
+        inorder_indices = {val: idx for idx, val in enumerate(inorder)}
 
         def builder(low, high):
 
@@ -18,7 +19,7 @@ class Solution:
             if low == high:
                 return
 
-            idx = inorder.index(postorder[self.i])
+            idx = inorder_indices[postorder[self.i]]
             root = TreeNode(postorder[self.i])
             self.i -= 1
 
