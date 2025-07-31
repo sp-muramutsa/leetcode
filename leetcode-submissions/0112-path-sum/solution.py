@@ -7,34 +7,24 @@
 class Solution:
     def hasPathSum(self, root: Optional[TreeNode], targetSum: int) -> bool:
 
-        # Top to bottom
-        # At each node, the sum can:
-            # be node + node.left
-            # or node + node.right
-        # We check the final sum when we get to the leaves
+        self.has_path_sum = False
 
-        if not root:
-            return False
-        
-        self.exists = False
-        def dfs(node, total):
-
+        def dfs(node, curr_sum):
             if not node:
                 return
 
+            # Leaf node
             if not node.left and not node.right:
-                if node.val + total == targetSum:
-                    self.exists = True 
-                return
-            
-            # Recursively visit the node's children
-            total += node.val
-            dfs(node.left, total)
-            dfs(node.right, total)
+                if curr_sum + node.val == targetSum:
+                    self.has_path_sum = True
+                    return
 
-            # Backtrack and remove this node   
-            total -= node.val
-        
+            curr_sum += node.val
+            dfs(node.left, curr_sum)
+            dfs(node.right, curr_sum)
+
+            curr_sum -= node.val
+
         dfs(root, 0)
-        return self.exists
+        return self.has_path_sum
 
