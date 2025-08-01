@@ -1,22 +1,22 @@
 class TrieNode:
-    def __init__(self):
-        self.alphabets = [None] * 26
+    def __init__(self) -> None:
+        self.children = [None] * 26
         self.is_end = False
 
-    def contains_key(self, key: str) -> bool:
-        return self.alphabets[ord(key) - ord("a")] is not None
+    def set_child(self, key: chr, node: "TrieNode") -> None:
+        self.children[ord(key) - ord("a")] = node
 
-    def get(self, key: str) -> "TrieNode":
-        return self.alphabets[ord(key) - ord("a")]
+    def get_child(self, key: chr) -> "TrieNode":
+        return self.children[ord(key) - ord("a")]
 
-    def put(self, key: str, node: "TrieNode"):
-        self.alphabets[ord(key) - ord("a")] = node
-
-    def set_end(self) -> None:
-        self.is_end = True
+    def contains_child(self, key: chr) -> bool:
+        return self.children[ord(key) - ord("a")] is not None
 
     def check_end(self) -> bool:
         return self.is_end
+
+    def set_end(self) -> bool:
+        self.is_end = True
 
 
 class Trie:
@@ -26,35 +26,29 @@ class Trie:
 
     def insert(self, word: str) -> None:
         curr = self.root
-
         for char in word:
-            if not curr.contains_key(char):
-                curr.put(char, TrieNode())
-            curr = curr.get(char)
+            if not curr.contains_child(char):
+                node = TrieNode()
+                curr.set_child(char, node)
+            curr = curr.get_child(char)
         curr.set_end()
 
     def search(self, word: str) -> bool:
+
         curr = self.root
-
         for char in word:
-            if curr.contains_key(char):
-                curr = curr.get(char)
-            else:
+            if not curr.contains_child(char):
                 return False
+            curr = curr.get_child(char)
 
-        if curr.check_end():
-            return True
-
-        return False
+        return curr.check_end()
 
     def startsWith(self, prefix: str) -> bool:
         curr = self.root
-
         for char in prefix:
-            if curr.contains_key(char):
-                curr = curr.get(char)
-            else:
+            if not curr.contains_child(char):
                 return False
+            curr = curr.get_child(char)
 
         return True
 
