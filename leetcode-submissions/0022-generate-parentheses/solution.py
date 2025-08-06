@@ -1,27 +1,27 @@
 class Solution:
     def generateParenthesis(self, n: int) -> List[str]:
-        
-        solution, path = [], []
-
-        def backtrack(open_count, close_count):
-            
-            if open_count == n and close_count == n:
-                solution.append("".join(path))
+        # We have two options either we add ( or we add )
+        # If the end of the path is reached we add the path to the result
+        # If the opening is less than the required opening
+        # Add the ( to path and dfs
+        # Backtrack and pop
+        # If the closing is less than the expeced closing 
+        # dfs backtracka and pop
+        result = []
+        def dfs(starting_index, closing, opening, path):
+            if starting_index == 2 * n:
+                result.append("".join(path.copy()))
                 return
-            
-            if close_count > open_count:
-                return
-            
-            if open_count < n:
-                path.append("(")
-                backtrack(open_count + 1, close_count)
-                path.pop()
-            
-            if close_count < n:
-                path.append(")")
-                backtrack(open_count, close_count + 1)
-                path.pop()
-        
-        backtrack(0, 0)
-        return solution
 
+            if opening < n:
+                path.append('(')
+                dfs(starting_index+1, closing, opening+1, path)
+                path.pop()
+
+            if closing < opening:
+                path.append(')')
+                dfs(starting_index+1, closing+1, opening, path)
+                path.pop()
+
+        dfs(0, 0, 0, [])
+        return result
