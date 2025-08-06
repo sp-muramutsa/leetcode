@@ -1,32 +1,29 @@
 class Solution:
     def permute(self, nums: List[int]) -> List[List[int]]:
-
-        """
-        :type nums: List[int]
-        :rtype: List[List[int]]
-        """
-        # Edge case if the length of curr is equal to the lenght of nums add curr to result and return
-        # Create a for loop 
-        # If the number is not eqaul to the current number and not in curr list
-        # Add it to curr and reculsively call the function
-        # After backtracking pop from curr and 
-        # return 
+        # Create a list for visited
+        # Create a result list
+        # Define the dfs function
+        # If the length of the path is length of the nums add the path to result
+        # Create a for loop for possible decisions
+        # If the current number is not visited
+        # Turn it to visited
+        # Dfs 
+        # After backtracking pop from the path
+        # Turn visited index back to False
+        visited_decisions = [False] * len(nums)
         result = []
-        def backtrack(curr):
-            if len(curr) == len(nums):
-                result.append(curr[:])
-                return 
+        length = len(nums)
+        def dfs(path):
+            if len(path) == length:
+                result.append(path.copy())
+                return
 
-            for i in range(len(nums)):
-                if nums[i] in curr:
-                    continue
-
-                curr.append(nums[i])
-                backtrack(curr)
-                curr.pop()
-
-
-            return 
-
-        backtrack([])
+            for i, n in enumerate(nums):
+                if visited_decisions[i] == False:
+                    visited_decisions[i] = True
+                    path.append(n)
+                    dfs(path)
+                    visited_decisions[i] = False
+                    path.pop()
+        dfs([])
         return result
