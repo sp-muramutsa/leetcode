@@ -1,47 +1,34 @@
 class Solution:
-    def dijkstra(
-        self, source: int, nodes: List[List[int]], cost: Dict[int, int]
-    ) -> Dict[int, int]:
+    def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
 
-        n = len(nodes)
-        distances = {node: float("inf") for node in range(1, n + 1)}
-        distances[source] = 0
+        adj = [[] for _ in range(n + 1)]
+        time = [[0] * (n + 1) for _ in range(n + 1)]
 
-        heap = []
-        heapq.heappush(heap, (0, source))
-        visited = set()
+        for u, v, w in times:
+            adj[u].append(v)
+            time[u][v] = w
+
+        heap = [(0, k)]
+        min_t = 0
+        min_time = [float("inf") for _ in range(n + 1)]
+        min_time[k] = 0
 
         while heap:
 
-            du, curr = heapq.heappop(heap)
+            t, src = heapq.heappop(heap)
 
-            if curr in visited:
+            if min_time[src] < t:
                 continue
 
-            visited.add(curr)
+            for dest in adj[src]:
+                new_t = t + time[src][dest]
+                if new_t < min_time[dest]:
+                    min_time[dest] = new_t
+                    heapq.heappush(heap, (new_t, dest))
 
-            for neighbor in nodes[curr - 1]:
-                new_dist = du + cost[(curr, neighbor)]
-                dv = distances[neighbor]
-
-                if new_dist < dv:
-                    distances[neighbor] = new_dist
-                    heapq.heappush(heap, (new_dist, neighbor))
-
-        for x in distances.values():
+        for x in min_time[1:]:
             if x == float("inf"):
                 return -1
 
-        return max(distances.values())
-
-    def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
-
-        adj = [[] for _ in range(n)]
-        cost = {}
-
-        for source, destination, time in times:
-            adj[source - 1].append(destination)
-            cost[(source, destination)] = time
-
-        return self.dijkstra(k, adj, cost)
+        return max(min_time[1:])
 
