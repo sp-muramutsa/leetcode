@@ -9,6 +9,7 @@ class Solution:
             if grid2[row][col] == 1 and grid1[row][col] != 1:
                 nonlocal is_island
                 is_island = False
+                return
             
             visited.add((row, col))
             for dx, dy in directions:
