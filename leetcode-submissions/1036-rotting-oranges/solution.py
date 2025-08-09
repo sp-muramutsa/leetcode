@@ -1,82 +1,46 @@
-from collections import deque
-
-
 class Solution:
     def orangesRotting(self, grid: List[List[int]]) -> int:
 
-        # BFS
-        # Start with a QueueFrontier with all rotten oranges
-        # Initialize minutes = 0
-        # While the frontier is not empty
-        # For each cell in the frontier
-        # Add its neighbors to the frontiner
-        # Update minutes by 1
-        # If all cells are rotten, return minutes. Else return -1.
+        ROWS, COLS = len(grid), len(grid[0])
+        directions = [(0, -1), (0, 1), (-1, 0), (1, 0)]
+        time = 0
+        rotten = set()
 
-        # Edge cases
-        # No fresh oranges initially: 0
-        # No rotten ones to begin with: -1
+        def bfs(rotten):
 
-        n = len(grid)
-        m = len(grid[0])
-        frontier = []
-        explored = set()
+            changed = False
 
-        fresh_count, rotten_count = 0, 0
-        for i in range(n):
-            for j in range(m):
-                if grid[i][j] == 2:
-                    frontier.append((i, j))
+            for row, col in rotten.copy():
 
-                if grid[i][j] == 1:
-                    fresh_count += 1
+                for dr, dc in directions:
+                    nr, nc = row + dr, col + dc
+                    if not (0 <= nr < ROWS and 0 <= nc < COLS):
+                        continue
 
-        if fresh_count == 0:
-            return 0
+                    if grid[nr][nc] == 1:
+                        grid[nr][nc] = 2
+                        rotten.add((nr, nc))
+                        changed = True
 
-        def get_fresh_neighbors(cell: tuple) -> List:
+            return changed
 
-            i, j = cell
-            neighbors = set()
+        rotten = set()
+        for row in range(ROWS):
+            for col in range(COLS):
+                if grid[row][col] == 2:
+                    rotten.add((row, col))
 
-            # Vertical
-            for x in range(i - 1, i + 2, 2):
-                if x >= 0 and x < n:
-                    if grid[x][j] == 1:
-                        neighbors.add((x, j))
+        while True:
+            flag = bfs(rotten)
+            if flag == False:
+                break
+            time += 1
 
-            # Horizontal
-            for y in range(j - 1, j + 2, 2):
-                if y >= 0 and y < m:
-                    if grid[i][y] == 1:
-                        neighbors.add((i, y))
+        # Check if there is any fresh tomato
+        for row in range(ROWS):
+            for col in range(COLS):
+                if grid[row][col] == 1:
+                    return -1
 
-            return neighbors
-
-        minutes = 0
-        while frontier:
-            print(frontier, minutes)
-            minutes += 1
-            for cell in frontier.copy():
-
-                # Mark the cell as rotten
-                i, j = cell
-                frontier.remove(cell)
-                explored.add(cell)
-                grid[i][j] = 2
-
-                neighbors = get_fresh_neighbors(cell)
-
-                for neighbor in neighbors:
-                    if neighbor not in frontier and neighbor not in explored:
-                        frontier.append(neighbor)
-
-        # Check if all oranges are rotten
-        no_fresh = True
-        for i in range(n):
-            for j in range(m):
-                if grid[i][j] == 1:
-                    no_fresh = False
-
-        return minutes - 1 if no_fresh else -1
+        return time
 
