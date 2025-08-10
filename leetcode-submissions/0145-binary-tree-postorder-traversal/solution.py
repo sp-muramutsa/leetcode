@@ -6,28 +6,19 @@
 #         self.right = right
 class Solution:
     def postorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
-
-        if not root:
-            return []
-
-        traversal = []
-        stack = []
-        curr = root
-        last_visited = root.val
-
-        while stack or curr:
-            while curr:
-                stack.append(curr)
-                curr = curr.left
-
-            peek = stack[-1]
-            if peek.right and peek.right != last_visited:
-                curr = peek.right
-
-            else:
-                node = stack.pop()
-                traversal.append(node.val)
-                last_visited = node
-
-        return traversal
-
+        # Using recursion
+        # Define your helper function
+        # Define your result list
+        # if root is None return 
+        # Recursively call the function on the left child
+        # Recursively call the function on the right child
+        result = []
+        def recursion(root):
+            if root is None:
+                return
+            
+            recursion(root.left)
+            recursion(root.right)
+            result.append(root.val)
+        recursion(root)
+        return result
