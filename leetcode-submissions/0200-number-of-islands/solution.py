@@ -1,74 +1,45 @@
-class UnionFind:
-    def __init__(self, grid: List[List[str]]) -> None:
-        """
-        Initializes a UnionFind data structure
-        Initially, each cell with a "1" is its own island.
-        """
-
-        self.parent = {}
-        self.size = {}
-        self.number_of_islands = 0
-
-        m, n = len(grid), len(grid[0])
-
-        for row in range(m):
-            for col in range(n):
-                if grid[row][col] == "1":
-                    self.number_of_islands += 1
-
-                self.size[(row, col)] = 1
-                self.parent[(row, col)] = (row, col)
-
-    def find(self, child: tuple) -> tuple:
-        """
-        Find with path compression
-        """
-
-        if self.parent[child] != child:
-            self.parent[child] = self.find(self.parent[child])
-
-        return self.parent[child]
-
-    def union(self, cell1: tuple, cell2: tuple) -> None:
-        """
-        Union with size
-        Decrement the number of islands on each union
-        """
-
-        parent1 = self.find(cell1)
-        parent2 = self.find(cell2)
-
-        if parent1 == parent2:
-            return
-
-        if self.size[parent1] > self.size[parent2]:
-            self.parent[parent2] = parent1
-            self.size[parent1] += self.size[parent2]
-        else:
-            self.parent[parent1] = parent2
-            self.size[parent2] += self.size[parent1]
-
-        self.number_of_islands -= 1
-
-
+from collections import deque
 class Solution:
     def numIslands(self, grid: List[List[str]]) -> int:
+        # Using DFS
 
-        m, n = len(grid), len(grid[0])
+        # Function too get the neighbors or possible moves of current position
+        def get_neighbors(grid, position):
+            length = len(grid[0])
+            width = len(grid)
+            possible_moves = []
+            if position[0] - 1 >= 0:
+                possible_moves.append((position[0]-1, position[1]))
+            if position[0] + 1 < width:
+                possible_moves.append((position[0]+1, position[1]))
+            
+            if position[1] - 1 >= 0:
+                possible_moves.append((position[0], position[1]-1))
 
-        uf = UnionFind(grid)
+            if position[1] + 1 < length:
+                possible_moves.append((position[0], position[1]+1))
+            return possible_moves
+        
+        # BFS on the grid to find all number of islands
+        def bfs(grid):
+            queue = deque()
+            visited = set()
+            result = 0
+            for i in range(len(grid)):
+                for j in range(len(grid[i])):
+                    if grid[i][j] == "0" or (i, j) in visited:
+                        continue
+                    queue.append((i, j))
+                    while queue:
+                        n = queue.popleft()
+                        for (p, q) in get_neighbors(grid, (n[0], n[1])):
+                            if grid[p][q] == "0" or (p, q) in visited:
+                                continue
+                            queue.append((p, q))
+                            visited.add((p, q))
 
-        movements = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+                    result += 1
+            return result
 
-        for row in range(m):
-            for col in range(n):
-                if grid[row][col] == "1":
-                    for dx, dy in movements:
-                        x, y = row + dx, col + dy
-                        if 0 <= x < m and 0 <= y < n:
-                            if grid[x][y] == "1":
-                                uf.union((row, col), (x, y))
-                    grid[row][col] = "0"
-
-        return uf.number_of_islands
+        return bfs(grid)
 
