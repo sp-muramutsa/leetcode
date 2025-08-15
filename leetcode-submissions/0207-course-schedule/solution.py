@@ -1,39 +1,30 @@
+from collections import defaultdict, deque
 class Solution:
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        # Hashmap for in-degree
+        in_degree = {i: 0 for i in range(numCourses)}
+        dependants = [[] for _ in range(numCourses)]
 
-        adj = [[] for _ in range(numCourses)]
-        for c, p in prerequisites:
-            adj[p].append(c)
+        # Set the in-degree values and also dependants
+        for child, parent in prerequisites:
+            in_degree[child] += 1
+            dependants[parent].append(child)
 
-        visited = [False] * numCourses
-        in_degree = [0] * numCourses
-
-        # Set in degrees
-        for c, p in prerequisites:
-            in_degree[c] += 1
-
-        # Khan's Algorithm for Topological sort
-        q = deque()
-        schedule = []
-
-        for i in range(numCourses):
+        # Khan's Algorithm
+        queue = deque()
+        for i in in_degree:
             if in_degree[i] == 0:
-                q.append(i)
+                queue.append(i)
+        
+        res = []
 
-        while q:
+        while queue:
+            n = queue.popleft()
+            res.append(n)
+            for neighbor in dependants[n]:
+                in_degree[neighbor] -= 1
+                if in_degree[neighbor] == 0:
+                    queue.append(neighbor)
 
-            # Process front node
-            prereq = q.popleft()
-            schedule.append(prereq)
-            visited[prereq] = True
-
-            # Reduce in degree of dependent courses
-            for dependent in adj[prereq]:
-                in_degree[dependent] -= 1
-
-                if in_degree[dependent] == 0 and not visited[dependent]:
-                    q.append(dependent)
-
-        # All courses should be scheduled
-        return not any(course == False for course in visited)
+        return len(res) == numCourses
 
