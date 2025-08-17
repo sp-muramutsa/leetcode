@@ -1,22 +1,13 @@
 class Solution:
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
-        # Write your code here
-        def get_hash(s):
-            res = []
-            for char in s:
-                res.append(ord(char) - ord("a"))
 
-            res.sort()
-            return "".join(str(res))
-
-        hashmap = {}
+        anagrams = defaultdict(list)
 
         for word in strs:
-            hash_ = get_hash(word)
-            if hash_ in hashmap:
-                hashmap[hash_].append(word)
-            else:
-                hashmap[hash_] = [word]
+            pattern = [0] * 26
+            for char in word:
+                pattern[ord(char) - ord("a")] += 1
+            anagrams[tuple(pattern)].append(word)
 
-        return list(hashmap.values())
+        return list(anagrams.values())
 
