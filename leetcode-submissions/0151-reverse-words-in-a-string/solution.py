@@ -1,14 +1,9 @@
 class Solution:
     def reverseWords(self, s: str) -> str:
-        substrings = s.split()
-        merged_string = ""
-        substrings = list(substrings)
-        length = len(substrings)
+        
+        words = s.split(" ")
+        words = [w for w in words if w != ""]
+        return " ".join(reversed(words)).strip()
 
-        i = length 
-        while i > 0:
-            merged_string = merged_string + substrings[i - 1] + " "
-            i -= 1
-        
-        return merged_string.rstrip()
-        
+       
+
