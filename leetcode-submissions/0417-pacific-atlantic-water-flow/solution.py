@@ -1,50 +1,55 @@
+from collections import deque
 class Solution:
-    def dfs(self, cell: tuple, heights: List[List[int]], visited: set) -> set:
-
-        movements = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-        ROWS, COLS = len(heights), len(heights[0])
-
-        def dfs(cell):
-
-            visited.add(cell)
-            row, col = cell
-
-            for dx, dy in movements:
-                x, y = row + dx, col + dy
-                if (
-                    0 <= x < ROWS
-                    and 0 <= y < COLS
-                    and (x, y) not in visited
-                    and heights[row][col] <= heights[x][y]
-                ):
-
-                    dfs((x, y))
-
-        dfs(cell)
-
     def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:
+        # Get the cells tha are adjacent to the Pacific
+        adj_pacific_cells = []
+        for j in range(len(heights[0])):
+            adj_pacific_cells.append((0, j))
 
-        ROWS, COLS = len(heights), len(heights[0])
+        for i in range(len(heights)):
+            adj_pacific_cells.append((i, 0))
+        # Get the cells that area adjacent to the atlantic
+        adj_atlantic_cells = []
+        for j in range(len(heights[0])):
+            adj_atlantic_cells.append((len(heights)-1, j))
 
-        # Pacific Ocean
-        pacific_visited = set()
-        for i in range(COLS):
-            self.dfs((0, i), heights, pacific_visited)
+        for i in range(len(heights)):
+            adj_atlantic_cells.append((i, len(heights[0])-1))
 
-        for j in range(ROWS):
-            self.dfs((j, 0), heights, pacific_visited)
+        def get_neighbors(cell, grid):
+            new_r = [1, 0, -1, 0]
+            new_c = [0, 1, 0, -1]
+            moves = []
 
-        print(pacific_visited)
+            for i in range(4):
+                r = new_r[i] + cell[0]
+                c = new_c[i] + cell[1]
 
-        # Atlantic ocean
-        atlantic_visited = set()
-        for k in range(COLS):
-            self.dfs((ROWS - 1, k), heights, atlantic_visited)
+                if 0 <= r < len(grid) and 0 <= c < len(grid[0]) and grid[r][c] >= grid[cell[0]][cell[1]]:
+                    moves.append((r, c))
 
-        for l in range(ROWS):
-            self.dfs((l, COLS - 1), heights, atlantic_visited)
+            return moves
+        # Us bfs to get the cells where cells have a greater height
+        def bfs(grid, adj):
+            visited = set()
+            queue = deque()
+            for i in adj:
+                visited.add(i)
+                queue.append(i)
+            while queue:
+                n = queue.popleft()
+                for cell in get_neighbors(n, grid):
+                    if cell in visited:
+                        continue
 
-        print(atlantic_visited)
+                    visited.add(cell)
+                    queue.append(cell)
+            return visited
 
-        return list(pacific_visited.intersection(atlantic_visited))
+        # Add those cells to Pacific list
+        res_pacific = bfs(heights, adj_pacific_cells)
+        # Do the same for those in Atlantic list
+        res_atlantic = bfs(heights, adj_atlantic_cells)
 
+        # Return the intersection
+        return list(res_pacific & res_atlantic)
