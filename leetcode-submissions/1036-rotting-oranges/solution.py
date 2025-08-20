@@ -1,46 +1,76 @@
+from collections import deque
 class Solution:
     def orangesRotting(self, grid: List[List[int]]) -> int:
+        # Get all cells with rotten tomatoes
+        # Add them to a queue
+        # Add them to visited data structure
+        # Create result minutes
+        # While queue
+        # Get the length pop from queue
+        # Check the neighbors, if neighbors are 1 and not visited we add them to the queue and we change them to 1
+        # Increameant the result
+        # Return result
 
-        ROWS, COLS = len(grid), len(grid[0])
-        directions = [(0, -1), (0, 1), (-1, 0), (1, 0)]
-        time = 0
-        rotten = set()
+        def get_neighbors(cell, grid):
+            new_row = [1, 0, -1, 0]
+            new_column = [0, 1, 0, -1]
+            moves = []
 
-        def bfs(rotten):
+            for i in range(4):
+                r = new_row[i] + cell[0]
+                c = new_column[i] + cell[1]
 
-            changed = False
+                if 0 <= r < len(grid) and 0 <= c < len(grid[0]) and grid[r][c] == 1:
+                    moves.append((r, c))
 
-            for row, col in rotten.copy():
+            return moves
 
-                for dr, dc in directions:
-                    nr, nc = row + dr, col + dc
-                    if not (0 <= nr < ROWS and 0 <= nc < COLS):
-                        continue
+        def get_rotten(grid):
+            cell = []
+            for i in range(len(grid)):
+                for j in range(len(grid[0])):
+                    if grid[i][j] == 2:
+                        cell.append((i, j))
 
-                    if grid[nr][nc] == 1:
-                        grid[nr][nc] = 2
-                        rotten.add((nr, nc))
+            return cell
+
+        def is_fresh(grid):
+            for i in range(len(grid)):
+                for j in range(len(grid[0])):
+                    if grid[i][j] == 1:
+                        return True
+
+            return False
+
+        def bfs(grid):
+            visited = set()
+            queue = deque()
+            cells = get_rotten(grid)
+            
+            for i in cells:
+                queue.append(i)
+                visited.add(i)
+
+            minutes = 0
+            while queue:
+                l = len(queue)
+                changed = False
+                for _ in range(l):
+                    n = queue.popleft()
+
+                    for j in get_neighbors(n, grid):
+                        if j in visited:
+                            continue
                         changed = True
+                        visited.add(j)
+                        queue.append(j)
+                        grid[j[0]][j[1]] = 2
+                if changed:
+                    minutes += 1
 
-            return changed
+            if is_fresh(grid):
+                return -1
 
-        rotten = set()
-        for row in range(ROWS):
-            for col in range(COLS):
-                if grid[row][col] == 2:
-                    rotten.add((row, col))
+            return minutes
 
-        while True:
-            flag = bfs(rotten)
-            if flag == False:
-                break
-            time += 1
-
-        # Check if there is any fresh tomato
-        for row in range(ROWS):
-            for col in range(COLS):
-                if grid[row][col] == 1:
-                    return -1
-
-        return time
-
+        return bfs(grid)
