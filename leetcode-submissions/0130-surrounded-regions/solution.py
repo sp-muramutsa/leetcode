@@ -1,45 +1,49 @@
-import itertools
-
-
 class Solution:
-
     def solve(self, board: List[List[str]]) -> None:
-        """
-        Do not return anything, modify board in-place instead.
-        """
+        if not board:
+            return
+        
+        edges = []
+        for i in range(len(board[0])):
+            edges.append((0, i))
+            edges.append((len(board)-1, i))
 
-        m, n = len(board), len(board[0])
+        for i in range(1, len(board)-1):
+            edges.append((i, 0))
+            edges.append((i, len(board[0])-1))
 
-        left = [(row, 0) for row in range(m)]
-        right = [(row, n - 1) for row in range(m)]
-        up = [(0, col) for col in range(n)]
-        down = [(m - 1, col) for col in range(n)]
+        def get_neighbors(cell, grid):
+            new_r = [1, 0, -1, 0]
+            new_c = [0, 1, 0, -1]
+            moves = []
+            for i in range(4):
+                r = new_r[i] + cell[0]
+                c = new_c[i] + cell[1]
+                if 0 <= r < len(grid) and 0 <= c < len(grid[0]) and grid[r][c] == "O":
+                    moves.append((r, c))
+            return moves
 
-        borders = list(itertools.chain(left, right, up, down))
-        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+        visited = set()
+        def dfs(cell):
+            stack = [cell]
+            while stack:
+                n = stack.pop()
+                if n in visited:
+                    continue
+                visited.add(n)
+                board[n[0]][n[1]] = "S"
+                for i in get_neighbors(n, board):
+                    if i not in visited:
+                        stack.append(i)
 
-        def dfs(r, c):
-            """
-            Mark any O that has a connection to the boarder with a letter "A" so it will be spared
-            """
+        for edge in edges:
+            if board[edge[0]][edge[1]] == "O":
+                dfs(edge)
 
-            board[r][c] = "A"
-
-            for dx, dy in directions:
-                x, y = r + dx, c + dy
-                if 0 <= x < m and 0 <= y < n and board[x][y] == "O":
-                    dfs(x, y)
-
-        # Run dfs and mark the cells to be spared
-        for row, col in borders:
-            if board[row][col] == "O":
-                dfs(row, col)
-
-        # Iterate over the board and "capture" and "spare" cells
-        for i in range(m):
-            for j in range(n):
-                if board[i][j] == "A":
-                    board[i][j] = "O"
-                elif board[i][j] == "O":
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                if board[i][j] == "O":
                     board[i][j] = "X"
+                elif board[i][j] == "S":
+                    board[i][j] = "O"
 
