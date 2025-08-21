@@ -7,26 +7,32 @@ class Node:
 """
 
 from typing import Optional
-
-
 class Solution:
-    def cloneGraph(self, node: Optional["Node"]) -> Optional["Node"]:
+    def cloneGraph(self, node: Optional['Node']) -> Optional['Node']:
+        if node is None:
+            return 
+        visited = set()
+        hashmap = {}
 
-        if not node:
-            return
+        def get_neighbors(node):
+            return node.neighbors
 
-        visited = {node: Node(node.val, [])}
-        q = deque([node])
+        def dfs(node):
+            stack = [node]
+            hashmap[node] = Node(node.val)
+            visited.add(node)
 
-        while q:
+            while stack:
+                n = stack.pop()
+                for neighbor in get_neighbors(n):
+                    if neighbor not in hashmap:
+                        hashmap[neighbor] = Node(neighbor.val)
+                    hashmap[n].neighbors.append(hashmap[neighbor])
+                    if neighbor in visited:
+                        continue
 
-            curr = q.pop()
+                    visited.add(neighbor)
+                    stack.append(neighbor)
 
-            for neighbor in curr.neighbors:
-                if neighbor not in visited:
-                    visited[neighbor] = Node(neighbor.val, [])
-                    q.append(neighbor)
-                visited[curr].neighbors.append(visited[neighbor])
-
-        return visited[node]
-
+        dfs(node)
+        return hashmap[node]
