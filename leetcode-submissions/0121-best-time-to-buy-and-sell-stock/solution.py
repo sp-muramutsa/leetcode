@@ -1,13 +1,20 @@
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
-        l, r= 0, 1
-        res = 0
-        while r < len(prices):
-            profit = prices[r] - prices[l]
-            if profit < 0:
+        # Choose the day woth lowest cost
+        # Create a profit variable
+        # Create 2 pointers 
+        # while r is less than the length 
+        # Find the difference
+        # Update the profit
+        profit = 0
+        l, r = 0, 1
+        while r <= len(prices) - 1:
+            diff = prices[r] - prices[l]
+            profit = max(profit, diff)
+            
+            if prices[l] > prices[r]:
                 l = r
-            res = max(profit, res)
+                
             r += 1
-        return res
             
-            
+        return profit
