@@ -1,27 +1,30 @@
 class Solution:
     def nextGreaterElement(self, nums1: List[int], nums2: List[int]) -> List[int]:
-        """ 
-        Time: O(length1 + length2) i.e. O(n)
-        Space: O(n)
-        Intuition: Iterate from left to right while stacking elements from nums2. Check and see if the current element is greater than what's on the top of the stack, we hash whatever is on the top with that number and keep popping while doing the same(this is where the sugar is. it means that number(from nums2) is the next greater element of the ones we are popping). After we are done iterating, we hash the remaining elements with -1(i.e. they have no next greater element).
-        The hardest part is over, now we go in the hashmap to look for the numbers in nums1 and their next elements.
-        """
-        length2 = len(nums2)
-        stack = []
+        # Create a result list 
+        # Create hashmap key will be number and value will be index
+        # Iterate through the nums1
+        # Get the index in nums2 using hashmap and if there exists right index and it is greater than current number add it to the reuslt, else add -1
+        
         hashmap = {}
+        result = []
+        for i, n in enumerate(nums2):
+            hashmap[n] = i
+            
+        for num in nums1:
+            idx = hashmap[num]
+            p1 = idx
+            if idx == len(nums2) - 1:
+                result.append(-1)
+                continue
 
-        for i in range(length2):
-            while stack and nums2[i] > stack[-1]:
-                hashmap[stack.pop()] = nums2[i]
-            stack.append(nums2[i])
+            while True:
+                if p1 == len(nums2) - 1:
+                    result.append(-1)
+                    break
+                if nums2[p1+1] > nums2[idx]:
+                    result.append(nums2[p1+1])
+                    break
+                p1 += 1
 
-        while stack:
-            hashmap[stack.pop()] = -1
-
-        length1 = len(nums1)
-
-        for i in range(length1):
-            nums1[i] = hashmap[nums1[i]]
-
-        return nums1
-
+            
+        return result
