@@ -7,30 +7,22 @@
 from collections import deque
 class Solution:
     def maxDepth(self, root: Optional[TreeNode]) -> int:
-        # Edge case if root is None return 0
+        # Iterative method
+        # Using a queue
         if root is None:
             return 0
-        # Using BFS 
-        length = 0
-        # Identify the BFS function
-        def BFS(root):
-            # Identify your queue
-            queue = deque()
-            queue.append(root)
-            # Identify your length
-            length = 0
-            # While the queue is not empty
-            while queue:
-                l = len(queue)
-                # Update the length
-                length += 1
-                # Pop from the queue and add the children if available
-                for i in range(l):
-                    node = queue.popleft()
-                    if node.right is not None:
-                        queue.append(node.right)
-                    if node.left is not None:
-                        queue.append(node.left)
-            # Return the length
-            return length
-        return BFS(root)
+        queue = deque()
+        queue.append(root)
+        level = 0
+
+        while queue:
+            l = len(queue)
+            for i in range(l):
+                node = queue.popleft()
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+            level += 1
+
+        return level
