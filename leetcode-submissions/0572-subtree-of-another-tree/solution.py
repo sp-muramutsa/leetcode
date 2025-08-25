@@ -5,45 +5,26 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-
-    def is_same_tree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
-
-        same = True
-
-        def dfs(p, q):
-            if not p and not q:
-                return
-
-            nonlocal same
-            if not p or not q:
-                same = False
-                return
-
-            if p.val != q.val:
-                same = False
-
-            dfs(p.left, q.left)
-            dfs(p.right, q.right)
-
-        dfs(p, q)
-        return same
-
     def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
+        # For each node we will check if subTree would be a node
+        # Implement a isSame function
+        # Traverse the root tree and check for each node
+        def isSame(r, s):
+            if r is None and s is None:
+                return True
+            elif r is None and s is not None or r is not None and s is None:
+                return False
+            elif r.val != s.val:
+                return False
+            return isSame(r.left, s.left) and isSame(r.right, s.right)
 
-        self.same = False
+        def isSubTree(root, sub):
+            if root is None:
+                return False
 
-        def dfs(node):
-            if not node:
-                return
+            if isSame(root, sub):
+                return True
 
-            print(node.val, self.is_same_tree(node, subRoot))
-            if self.is_same_tree(node, subRoot):
-                self.same = True
-                return
+            return (isSubTree(root.left, sub) or isSubTree(root.right, sub))
 
-            dfs(node.left)
-            dfs(node.right)
-
-        dfs(root)
-        return self.same
-
+        return isSubTree(root, subRoot)
