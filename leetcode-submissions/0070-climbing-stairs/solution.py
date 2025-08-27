@@ -1,13 +1,17 @@
 class Solution:
-
-    @lru_cache(maxsize=2)
     def climbStairs(self, n: int) -> int:
 
         if n == 1:
             return 1
 
-        if n == 2:
-            return 2
+        cache = [0] * n
+        prev = 1
+        curr = 2
 
-        return self.climbStairs(n-1) + self.climbStairs(n-2)  
-        
+        for i in range(2, n):
+            temp = curr + prev
+            prev = curr
+            curr = temp        
+
+        return curr
+
