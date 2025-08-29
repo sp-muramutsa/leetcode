@@ -1,42 +1,45 @@
-from typing import List
-
-
 class Solution:
-
-    def manacher_radii(self, s: str) -> List[int]:
-
-        t = "^#" + "#".join(s) + "#$"
-        n = len(t)
-        radii = [0] * n
-
-        center, radius = 0, 0
-
-        for right in range(1, n - 1):
-            if radius > right:
-                mirror = 2 * center - right
-                radii[right] = min(radius - right, radii[mirror])
-
-            while t[right + (1 + radii[right])] == t[right - (1 + radii[right])]:
-                radii[right] += 1
-
-            if right + radii[right] > radius:
-                center, radius = right, right + radii[right]
-
-        return radii
-
     def longestPalindrome(self, s: str) -> str:
 
-        if len(s) == 1 or len(s) == 0:
-            return s
+        # Manacher's Algorithm O(n)
 
-        radii = self.manacher_radii(s)
-        print(radii)
+        n = len(s)
 
-        # Get max length and center
+        # Transform string
+        t = "^#"
+        for char in s:
+            t += char + "#"
+        t += "$"
+
+        n = len(t)
+        radii = [0] * n
+        c = r = 0
+
+        for i in range(1, n):
+
+            # i is within r: Use mirror before expanding
+            if i <= r:
+                mirror = 2 * c - i
+                radii[i] = min(radii[mirror], r - i)
+
+            # i is beyond r: Expand
+            left = i - radii[i] - 1
+            right = i + radii[i] + 1
+
+            while left >= 0 and right < n and t[left] == t[right]:
+                radii[i] += 1
+                left -= 1
+                right += 1
+
+            # Current palindrome is longer than previous one
+            if i + radii[i] > r:
+                r = i + radii[i]
+                c = i
+
         max_radius = max(radii)
         max_center = radii.index(max_radius)
 
-        # Compute start in original string
         start = (max_center - max_radius) // 2
+
         return s[start : start + max_radius]
 
