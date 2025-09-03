@@ -5,19 +5,20 @@
 #         self.next = next
 class Solution:
     def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        # Using a list we can crete a new linked list
+        # The time and space complexity becomes O(n)
+        # You return the reversed list after making it a linked list
+        res = []
+        curr = head
+        while curr:
+            res.append(curr.val)
+            curr = curr.next
 
-        if not head or not head.next:
-            return head
+        dummy = ListNode(0)
+        curr = dummy
+        res.reverse()
+        for i in res:
+            curr.next = ListNode(i)
+            curr = curr.next
 
-        prev, curr = None, head
-
-        while curr is not None:
-            temp = curr.next
-
-            curr.next = prev
-            prev = curr
-
-            curr = temp
-
-        return prev
-
+        return dummy.next
