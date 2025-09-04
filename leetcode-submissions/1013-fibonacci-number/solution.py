@@ -1,14 +1,18 @@
 class Solution:
     def fib(self, n: int) -> int:
+        # Tabulation with optimized space complexity O(1)
+        # The time complexity is still O(n)
+        # We use prev and curr pointer to keep track of the current position 
+        # Return the curr position
 
-        if n == 0 or n == 1:
+        if n <= 1:
             return n
 
-        prev_2, prev_1 = 0, 1
+        prev, curr = 0, 1
 
-        for i in range(2, n):
-            curr = prev_1 + prev_2
-            prev_1, prev_2 = curr, prev_1
+        for i in range(2, n+1):
+            tmp = prev + curr
 
-        return prev_1 + prev_2
-
+            prev = curr
+            curr = tmp
+        return curr
