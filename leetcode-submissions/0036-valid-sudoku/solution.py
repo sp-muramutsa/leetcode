@@ -1,31 +1,33 @@
 class Solution:
     def isValidSudoku(self, board: List[List[str]]) -> bool:
-        for row in range(9):
-            seen = set()
-            for column in range(9):
-                if board[row][column] == ".":
+        # Create empty sets of rows and columns
+        # Create set for 3x3 grid
+        # Iterate over the elements in the grid
+        # If the element is already in any of the position set return False
+        # Add it to the sets
+        # Return True
+
+        row_set = [set() for i in range(9)]
+        col_set = [set() for i in range(9)]
+        sub_grid = []
+        for i in range(3):
+            n = []
+            for j in range(3):
+                n.append(set())
+            sub_grid.append(n)
+
+
+        for i in range(9):
+            for j in range(9):
+                if board[i][j] == ".":
                     continue
-                if board[row][column] in seen:
+                    
+                if board[i][j] in row_set[i] or board[i][j] in col_set[j] or board[i][j] in sub_grid[i//3][j//3]:
                     return False
-                seen.add(board[row][column])
-        
-        for column in range(9):
-            seen = set()
-            for row in range(9):
-                if board[row][column] == ".":
-                    continue
-                if board[row][column] in seen:
-                    return False
-                seen.add(board[row][column])
-            
-        for box_row in range(0, 9, 3):
-            for box_column in range(0, 9, 3):
-                seen = set()
-                for i in range(box_row, box_row + 3):
-                    for j in range(box_column, box_column + 3):
-                        if board[i][j] == ".":
-                            continue
-                        if board[i][j] in seen:
-                            return False
-                        seen.add(board[i][j])
+
+                row_set[i].add(board[i][j])
+                col_set[j].add(board[i][j])
+                sub_grid[i//3][j//3].add(board[i][j])
+
         return True
+                
