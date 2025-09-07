@@ -5,38 +5,38 @@
 #         self.next = next
 class Solution:
     def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
-        # Create a dummy node
-        res = ListNode(0)
-        pointer = res
-        # Reverse the list for both of them
-        def reverse_lst(lst):
-            curr = lst
-            prev = None
-
+        def rev(node):
+            prev, curr = None, node
             while curr:
-                tmp = curr.next  
+                tmp = curr.next
                 curr.next = prev
                 prev = curr
                 curr = tmp
             return prev
-        lst1 = reverse_lst(l1)
-        lst2 = reverse_lst(l2)
-        # Create a new list node
-        divisor = 0
-        # We move through the keep ading the values 
-        while lst1 is not None or lst2 is not None:
-        # If the number is grreater than 10 keep the remainder and store the divisor
-            tot = divisor + (lst1.val if lst1 is not None else 0) + (lst2.val if lst2 is not None else 0)
-            if tot >= 10:
-                num = tot % 10
-                divisor = tot // 10
+        
+        l1_rev = rev(l1)
+        l2_rev = rev(l2)
+        p1 = l1_rev
+        p2 = l2_rev
+        
+        counter = 0
+        dummy = ListNode(0)
+        p3 = dummy
+        while p1 or p2:
+            v1 = p1.val if p1 else 0
+            v2 = p2.val if p2 else 0
+            tot = v1 + v2 + counter
+
+            if tot>=10:
+                p3.next = ListNode(tot%10)
+                counter = tot//10
             else:
-                num = tot
-                divisor = 0
-            pointer.next = ListNode(num)
-            pointer = pointer.next
-            lst1 = (lst1.next if lst1 is not None else None)
-            lst2 = (lst2.next if lst2 is not None else None)
-        if divisor != 0:
-            pointer.next = ListNode(divisor)
-        return reverse_lst(res.next)
+                p3.next = ListNode(tot)
+                counter = 0
+            p1 = p1.next if p1 else None
+            p2 = p2.next if p2 else None
+            p3 = p3.next
+        if counter > 0:
+            p3.next = ListNode(counter)
+        
+        return rev(dummy.next)
