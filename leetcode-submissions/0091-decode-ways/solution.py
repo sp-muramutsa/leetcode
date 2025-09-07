@@ -1,33 +1,26 @@
 class Solution:
     def numDecodings(self, s: str) -> int:
 
+        if s[0] == "0":
+            return 0
+
         n = len(s)
-        dp = [0] * (n + 1)
+        one_digit = 1
+        two_digits = 1
 
-        def backtrack(i):
+        # string ending at i
+        for i in range(1, n):
 
-            if dp[i] != 0:
-                return dp[i]
+            temp = 0
+            # Single character
+            if s[i] != "0":
+                temp = one_digit
 
-            # We go to the last digit: 1 valid decoding
-            if i == n:
-                return 1
+            # Check if we can decode using a double-digit
+            if 0 < int(s[i-1]) <= 2 and 0 < int(s[i - 1: i + 1]) <= 26:
+                temp += two_digits
 
-            # 0 valid decodings 
-            if s[i] == "0":
-                return 0
+            two_digits = one_digit
+            one_digit = temp
 
-            # Process this index
-            dp[i] += backtrack(i + 1)
-
-            # Process the next (double digits)
-            if i < n - 1:
-                nbr = int(s[i : i + 2])
-                if 0 < nbr <= 26:
-                    dp[i] += backtrack(i + 2)
-
-            return dp[i]
-
-        backtrack(0)
-        return dp[0]
-
+        return one_digit
