@@ -1,29 +1,37 @@
 class Solution:
     def countSubstrings(self, s: str) -> int:
 
-        # 3: Expanding from the centers: O(n ** 2) time and O(n) space
+        # 4: Manacher's Algorithm: Time O(n) and Space: O(n)
 
-        n = len(s)
-        palindromes = n
+        m = len(s)
+        palindromes = 0
 
-        for c in range(n):
-            l, r = c - 1, c + 1
-            while l >= 0 and r < n and s[l] == s[r]:
-                palindromes += 1
+        t = "^#" + "#".join(s) + "#$"
+
+        n = len(t)
+        radii_length = [0] * n
+        center = right = 0
+
+        for i in range(1, n - 1):
+
+            # Mirror
+            if i <= right:
+                mirror = 2 * center - i
+                radii_length[i] = min(radii_length[mirror], right - i)
+
+            # Expand
+            l = i - radii_length[i] - 1
+            r = i + radii_length[i] + 1
+
+            while l >= 0 and r < n and t[l] == t[r]:
+                radii_length[i] += 1
                 l -= 1
                 r += 1
 
-        for c1 in range(n - 1):
-            c2 = c1 + 1
-            if s[c1] == s[c2]:
-                palindromes += 1
+            # Found longer palindrome: Update right and center
+            if i + radii_length[i] > right:
+                right = i + radii_length[i]
+                center = i
 
-                l, r = c1 - 1, c2 + 1
-
-                while l >= 0 and r < n and s[l] == s[r]:
-                    palindromes += 1
-                    l -= 1
-                    r += 1
-
-        return palindromes
+        return sum((radius + 1) // 2 for radius in radii_length)
 
