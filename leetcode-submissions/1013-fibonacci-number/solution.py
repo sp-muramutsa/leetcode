@@ -1,18 +1,19 @@
 class Solution:
     def fib(self, n: int) -> int:
-        # Tabulation with optimized space complexity O(1)
-        # The time complexity is still O(n)
-        # We use prev and curr pointer to keep track of the current position 
-        # Return the curr position
-
-        if n <= 1:
-            return n
-
-        prev, curr = 0, 1
-
-        for i in range(2, n+1):
-            tmp = prev + curr
-
-            prev = curr
-            curr = tmp
-        return curr
+        # Create a list that keeps the calculation of numbers
+        dp = [-1] * (n+1)
+        # Base case if the number index is not -1 return the number
+        def dfs(num):
+            if num == 1:
+                return 1
+            if num == 0:
+                return 0
+            
+            if dp[num] != -1:
+                return dp[num]
+            
+            dp[num] = (dfs(num-1) + dfs(num-2))
+            return dp[num]
+        # Return the sum of recursively called num -1 and num - 2
+        return dfs(n)
+        
