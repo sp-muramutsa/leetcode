@@ -1,18 +1,18 @@
 class Solution:
     def lengthOfLIS(self, nums: List[int]) -> int:
+        dp = [1] * len(nums)
+        res = float("-inf")
 
-        n = len(nums)
-        dp = [0] * n
-        dp[0] = 1
-        longest = 0
+        for i in range(len(nums)-2, -1, -1):
+            ans = 1
+            for j in range(i+1, len(dp)):
+                if nums[j] > nums[i]:
+                    ans = max(ans, (1+dp[j]))
+            dp[i] = ans
+            res = max(res, ans)
+            print(res)
 
-        for end in range(n):
-            for prev in range(end):
-                if nums[end] > nums[prev]:
-                    dp[end] = max(dp[end], dp[prev] + 1)
-                else:
-                    dp[end] = max(dp[end], 1)
-            longest = max(longest, dp[end])
+        if res == float("-inf"):
+            return 1
 
-        return longest
-
+        return res
