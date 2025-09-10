@@ -4,31 +4,23 @@
 #         self.val = x
 #         self.left = None
 #         self.right = None
-
-
 class Solution:
     def inorderSuccessor(self, root: TreeNode, p: TreeNode) -> Optional[TreeNode]:
+        li = []
 
-        """
-        In a BST, an inorder successor is the node with the smallest key greater than p.val
+        def dfs(root):
+            if root is None:
+                return
 
-        Intuition:
-        - We can traverse the tree downwards
-        - Anytime we see a larger value than p, we update the result and move left
-        - Otherwise, we move right.
-        """
-       
-        curr = root
-        res = None
+            dfs(root.left)
+            li.append(root)
+            dfs(root.right)
         
-        while curr:  
-            if curr.val > p.val:
-                res = curr
-                curr = curr.left   
-            else:
-                curr = curr.right
+        dfs(root)
         
-        return res
+        for i in range(len(li)):
+            if li[i].val == p.val:
+                if (i+1) == len(li):
+                    return None
 
-        
-
+                return li[i+1]
