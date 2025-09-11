@@ -1,33 +1,36 @@
 class Solution:
     def canPartition(self, nums: List[int]) -> bool:
 
-        # Tabulation: Can we make up this target sum using i first elements ?
-
+        n = len(nums)
         total = sum(nums)
 
         if total % 2 == 1:
             return False
 
-        n = len(nums)
-        target_sum = total // 2
+        half = total // 2
+        memo = {}
 
-        dp = [[False for _ in range(target_sum + 1)] for _ in range(n + 1)]
-        dp[0][0] = True
+        
+        def backtrack(i, remaining_sum):
 
-        for i in range(1, n + 1):
-            for curr_sum in range(target_sum + 1):
+            if (i, remaining_sum) in memo:
+                return memo[(i, remaining_sum)]
 
-                sum_we_need = curr_sum - nums[i - 1]
-                if abs(sum_we_need) + 1 > target_sum:
-                    continue
-
-                choose = dp[i - 1][sum_we_need]
-                not_choose = dp[i - 1][curr_sum]
-                dp[i][curr_sum] = choose or not_choose
-
-        for x in range(n + 1):
-            if dp[x][-1]:
+            if remaining_sum == 0:
                 return True
 
-        return False
+            if i == n:
+                return False
+
+            memo[(i, remaining_sum)] = False
+            if backtrack(i + 1, remaining_sum - nums[i]):
+                memo[(i, remaining_sum)] = True
+                return memo[(i, remaining_sum)]
+            elif backtrack(i + 1, remaining_sum):
+                memo[(i, remaining_sum)] = True
+                return memo[(i, remaining_sum)]
+            
+            return memo[(i, remaining_sum)]
+
+        return backtrack(0, half)
 
