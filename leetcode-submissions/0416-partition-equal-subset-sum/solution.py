@@ -2,35 +2,31 @@ class Solution:
     def canPartition(self, nums: List[int]) -> bool:
 
         n = len(nums)
-        total = sum(nums)
 
+        total = sum(nums)
         if total % 2 == 1:
             return False
 
         half = total // 2
-        memo = {}
+        dp = [[False] * (half + 1) for _ in range(n + 1)]
 
-        
-        def backtrack(i, remaining_sum):
+        for i in range(n + 1):
+            dp[i][0] = True
 
-            if (i, remaining_sum) in memo:
-                return memo[(i, remaining_sum)]
+        for i in range(1, n + 1):
+            for curr_sum in range(1, half + 1):
 
-            if remaining_sum == 0:
-                return True
+                # Choose
+                complement = curr_sum - nums[i - 1]
+                if complement >= 0 and dp[i - 1][complement]:
+                    dp[i][curr_sum] = True
 
-            if i == n:
-                return False
+                # Not choose
+                if dp[i - 1][curr_sum]:
+                    dp[i][curr_sum] = True
 
-            memo[(i, remaining_sum)] = False
-            if backtrack(i + 1, remaining_sum - nums[i]):
-                memo[(i, remaining_sum)] = True
-                return memo[(i, remaining_sum)]
-            elif backtrack(i + 1, remaining_sum):
-                memo[(i, remaining_sum)] = True
-                return memo[(i, remaining_sum)]
-            
-            return memo[(i, remaining_sum)]
+                if curr_sum == half and dp[i][curr_sum]:
+                    return True
 
-        return backtrack(0, half)
+        return False
 
