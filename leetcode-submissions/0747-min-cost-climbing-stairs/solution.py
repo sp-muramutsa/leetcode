@@ -1,16 +1,14 @@
 class Solution:
     def minCostClimbingStairs(self, cost: List[int]) -> int:
-
-        # Solution 4/4: Bottom down DP, Constant space
         n = len(cost)
-        one_step_back = 0
-        two_steps_back = 0
-        res = 0
+        dp = [-1] * (n+1)
 
-        for i in range(2, n + 1):
-            res = min(one_step_back + cost[i - 1], two_steps_back + cost[i - 2])
-            two_steps_back = one_step_back
-            one_step_back = res
+        def dfs(idx):
+            if idx >= n:
+                return 0
+            if dp[idx] != -1:
+                return dp[idx]
+            dp[idx] = cost[idx] + min(dfs(idx+1), dfs(idx+2))
+            return dp[idx]
 
-        return res
-
+        return min(dfs(0), dfs(1))
