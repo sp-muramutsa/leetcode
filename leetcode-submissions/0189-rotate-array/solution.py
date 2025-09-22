@@ -3,13 +3,24 @@ class Solution:
         """
         Do not return anything, modify nums in-place instead.
         """
-        while k > 0: #O(k)
-            nums.insert(0, nums[-1]) # O(n)
-            nums.pop() # O(1)
-            k -= 1
+        k = k % len(nums)
+        # Reverse the list
+        l, r = 0, len(nums) - 1
+        while l < r:
+            nums[l], nums[r] = nums[r], nums[l]
+            l += 1
+            r -= 1
 
-        """
-        Time complexity: O(n * k)
-        Space complexity: O(1)
-        """
-        
+        # Reverse the first k elements
+        l, r = 0, k - 1
+        while l < r:
+            nums[r], nums[l] = nums[l], nums[r]
+            r -= 1
+            l += 1
+
+        # Rverse he rest of the elements
+        l, r = k, len(nums) - 1
+        while l < r:
+            nums[r], nums[l] = nums[l], nums[r]
+            r -= 1
+            l += 1
