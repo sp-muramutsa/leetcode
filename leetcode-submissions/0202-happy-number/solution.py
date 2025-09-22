@@ -1,22 +1,25 @@
 class Solution:
     def isHappy(self, n: int) -> bool:
-        hashmap = {}
+        # Create a set the keeps visited numbers
+        visited = set()
+        # Implement a function that calculates the sum
         def tot(num):
-            res = []
-            tot = 0
-            word = str(num)
-            for i in word:
-                res.append(int(i))
-            for j in res:
-                tot += j ** 2
-            return tot
-        value = n
-        while True:
-            val = tot(value)
-            if value in hashmap:
-                return False
-            elif value == 1:
+            res = 0
+            while num >= 10:
+                res += (num%10)**2
+                num = num // 10
+            res += (num)**2
+            print(res)
+            return res
+        
+        # While sum is not in visited
+        while n not in visited:
+            # Store n in visited
+            visited.add(n)
+            total = tot(n)
+            # If sum is 1 returnn True
+            if total == 1:
                 return True
-            else:
-                hashmap[value] = val
-            value = val
+            n = total
+        # Return False
+        return False
