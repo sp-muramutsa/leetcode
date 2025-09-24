@@ -3,18 +3,17 @@ class Solution:
         """
         Do not return anything, modify s in-place instead.
         """
-        n = len(s)
-        l, r = 0, n - 1
+        start = 0
+        end = len(s) - 1
         
-
-        while l < r:
-            temp = s[l]
-            s[l] = s[r]
-            s[r] = temp
-            l += 1
-            r -= 1
-
-
-
+        while start < end:
+            temporary_string = s[start]
             
+            s[start] = s[end]
+            s[end] = temporary_string
+            
+            start += 1
+            end -= 1
+            
+
         
