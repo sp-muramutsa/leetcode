@@ -1,33 +1,21 @@
 class Solution:
     def numSquares(self, n: int) -> int:
+        squares = [i*i for i in range(1, int(math.sqrt(n)) + 1)]
+        cache = {}
 
-        sqrt_n = sqrt(n)
-        ceil_sqrt_n = ceil(sqrt_n)
+        def dfs(rem):
+            if rem == 0:
+                return 0
+            if rem in cache:
+                return cache[rem]
 
-        # Base case: n is a perfect square
-        if sqrt_n == ceil_sqrt_n:
-            return 1
+            res = float("inf")
+            for i in squares:
+                if i <= rem:
+                    res = min(res, 1 + dfs(rem - i))
 
-        # Enumerate all possible perfect squares
-        perfect_squares = [x**2 for x in range(1, ceil_sqrt_n)]
+            cache[rem] = res
 
-        # Make a dp table
-        dp = [float("inf")] * (n + 1)
+            return res
 
-        # Base cases: perfect squares
-        for y in perfect_squares:
-            dp[y] = 1
-
-        for i in range(2, n + 1):
-
-            if dp[i] == 1:
-                continue
-
-            # Loop through all perfect squares less than i
-            for y in perfect_squares:
-                if y > i:
-                    break
-                dp[i] = min(dp[i], 1 + dp[i - y])
-
-        return dp[-1]
-
+        return dfs(n)
