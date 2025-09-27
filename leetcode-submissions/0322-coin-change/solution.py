@@ -1,27 +1,22 @@
 class Solution:
     def coinChange(self, coins: List[int], amount: int) -> int:
+        # Using Tabulation or Bottom up
+        # Create a dp of length 11
+        # Edge case 0
+        # Starting from 1 Find the remainder and take the minimum
+        # Reach the end and return the last index value if it not infinity
 
-        # BFS: Shortest path
+        dp = [float("inf")] * (amount+1)
+        dp[0] = 0
 
-        q = deque([(0, 0)])
-        visited = set()
+        for i in range(1, amount+1):
+            for j in coins:
+                if j <= i:
+                    dp[i] = min(dp[i], dp[i-j] + 1)
 
-        while q:
+        print(dp)
 
-            amount_so_far, coins_used = q.popleft()
+        if dp[-1] == float("inf"):
+            return -1
 
-            if amount_so_far == amount:
-                return coins_used
-
-            for coin in coins:
-
-                new_amount_so_far = amount_so_far + coin
-
-                if new_amount_so_far in visited or new_amount_so_far > amount:
-                    continue
-                
-                visited.add(new_amount_so_far)
-                q.append((new_amount_so_far, 1 + coins_used))
-
-        return -1
-
+        return dp[-1]
