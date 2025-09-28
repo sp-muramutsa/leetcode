@@ -1,44 +1,34 @@
 class Solution:
     def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
-        """
-        Khan's algorithm for Topological Sort in Directed Acyclic Graphs (and cycle detection in cyclic ones)
-        """
-
-        # Adjacency list: course -> prerequisite
-
+        
+        in_degree = [0] * numCourses
         adj = [[] for _ in range(numCourses)]
-        for c, p in prerequisites:
-            adj[p].append(c)
 
-        schedule = deque()
-        visited = {course: False for course in range(numCourses)}
+        for course, prereq in prerequisites:
+            in_degree[course] += 1
+            adj[prereq].append(course)
 
-        # Calculate in degrees i.e. number of prereqs per course
-        in_degree = {course: 0 for course in range(numCourses)}
-        for c, p in prerequisites:
-            in_degree[c] += 1
+        print(in_degree)
+        print(adj)
+        
+        q = deque([course for course in range(numCourses) if in_degree[course] == 0])
+        scheduling = []
 
-        # Enqueue courses with no prereqs
-        q = deque()
-        for destination in in_degree:
-            if in_degree[destination] == 0:
-                q.append(destination)
-
-        # Khan's algorithm for Topological Ordering
         while q:
 
             curr = q.popleft()
-            visited[curr] = True
-            schedule.append(curr)
+            scheduling.append(curr)
 
-            for course in adj[curr]:
-                in_degree[course] -= 1
+            for dest in adj[curr]:
+                in_degree[dest] -= 1
 
-                if in_degree[course] == 0 and not visited[course]:
-                    q.append(course)
+                if in_degree[dest] == 0:
+                    q.append(dest)
 
-        if any(not visited[course] for course in visited):
-            return []
+        return scheduling if len(scheduling) == numCourses else []
 
-        return list(schedule)
+
+
+
+
 
