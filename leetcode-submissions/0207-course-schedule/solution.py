@@ -1,30 +1,28 @@
-from collections import defaultdict, deque
 class Solution:
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
-        # Hashmap for in-degree
-        in_degree = {i: 0 for i in range(numCourses)}
-        dependants = [[] for _ in range(numCourses)]
-
-        # Set the in-degree values and also dependants
-        for child, parent in prerequisites:
-            in_degree[child] += 1
-            dependants[parent].append(child)
-
-        # Khan's Algorithm
-        queue = deque()
-        for i in in_degree:
-            if in_degree[i] == 0:
-                queue.append(i)
         
-        res = []
+        in_degree = [0] * numCourses
+        adj = defaultdict(list)
 
-        while queue:
-            n = queue.popleft()
-            res.append(n)
-            for neighbor in dependants[n]:
-                in_degree[neighbor] -= 1
-                if in_degree[neighbor] == 0:
-                    queue.append(neighbor)
+        for dest, src in prerequisites:
+            in_degree[dest] += 1
+            adj[src].append(dest)
+        
+        q = deque([course for course in range(numCourses) if in_degree[course] == 0])
+        scheduled = 0
 
-        return len(res) == numCourses
+        while q:
+
+            curr = q.popleft()
+            scheduled += 1
+
+            for course in adj[curr]:
+                in_degree[course] -= 1
+
+                if in_degree[course] == 0:
+                    q.append(course)
+        
+        return scheduled == numCourses
+
+
 
