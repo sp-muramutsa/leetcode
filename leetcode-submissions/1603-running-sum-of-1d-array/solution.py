@@ -1,14 +1,11 @@
 class Solution:
     def runningSum(self, nums: List[int]) -> List[int]:
-
-        """
-        Time: O(n)
-        Space: O(1)
-        """
-
-        length = len(nums)
-        for i in range(1, length):
-            nums[i] = nums[i-1] + nums[i]
+        prefix_sum = [nums[0]]
+        running_sum = nums[0]
         
-        return nums
+        for counter in range(1, len(nums)):
+            running_sum += nums[counter]
+            prefix_sum.append(running_sum)
+            
+        return prefix_sum
         
