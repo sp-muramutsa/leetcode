@@ -1,46 +1,52 @@
+class UnionFind:
+    def __init__(self, adj):
+        self.parents = {}
+        self.ranks = {}
+
+        for u, v in adj:
+            self.parents[u] = u
+            self.parents[v] = v
+            self.ranks[u] = 1
+            self.ranks[v] = 1
+
+    def find(self, x):
+        if self.parents[x] != x:
+            self.parents[x] = self.find(self.parents[x])
+        return self.parents[x]
+
+    def union(self, x, y):
+
+        parent_x = self.find(x)
+        parent_y = self.find(y)
+
+        if parent_x == parent_y:
+            return
+
+        if self.ranks[parent_x] > self.ranks[parent_y]:
+            self.parents[parent_y] = parent_x
+        elif self.ranks[parent_x] < self.ranks[parent_y]:
+            self.parents[parent_x] = parent_y
+        else:
+            self.parents[parent_y] = parent_x
+            self.ranks[parent_x] += 1
+
+
 class Solution:
     def validTree(self, n: int, edges: List[List[int]]) -> bool:
-        # We are going to check the parent of the node between edged nodes
-        # Create a rank to show number of children
-        # Implement the find function
-        # Implement the union function
-        # Parents are the same return False
-        # Return True
-        # Iterate over the eges and operate union find
-        # If union is False return False
-        # Return True at the end of the for loop
-        if len(edges) != n-1:
+
+        if len(edges) != n - 1:
             return False
 
-        parent = [i for i in range(n)]
-        rank = [1] * n
+        uf = UnionFind(edges)
 
-        def find(n):
-            if parent[n] != n:
-                parent[n] = find(parent[n])
+        for u, v in edges:
+            parent_u = uf.find(u)
+            parent_v = uf.find(v)
 
-            return parent[n]
-
-        def union(edge):
-            p1 = find(edge[0])
-            p2 = find(edge[1])
-
-            if p1 == p2:
+            if parent_u == parent_v:
                 return False
 
-            if rank[p1] > rank[p2]:
-                parent[p2] = p1
-                rank[p1] += rank[p2]
-
-            else:
-                parent[p1] = p2
-                rank[p2] += rank[p1]
-
-            return True
-
-        for edge in edges:
-            if not union(edge):
-                return False
+            uf.union(u, v)
 
         return True
 
