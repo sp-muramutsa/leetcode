@@ -1,60 +1,58 @@
-from collections import deque
+class UnionFind:
+    def __init__(self, grid):
+        self.parents = {}
+        self.sizes = {}
+
+        ROWS, COLS = len(grid), len(grid[0])
+
+        for row in range(ROWS):
+            for col in range(COLS):
+                if grid[row][col] == 1:
+                    self.parents[(row, col)] = (row, col)
+                    self.sizes[(row, col)] = 1
+
+    def collapsing_find(self, x):
+
+        if self.parents[x] != x:
+            self.parents[x] = self.collapsing_find(self.parents[x])
+        return self.parents[x]
+
+    def weighted_union(self, x, y):
+
+        parent_x = self.collapsing_find(x)
+        parent_y = self.collapsing_find(y)
+        if parent_x == parent_y:
+            return
+
+        if self.sizes[parent_x] > self.sizes[parent_y]:
+            self.parents[parent_y] = parent_x
+            self.sizes[parent_x] += self.sizes[parent_y]
+        else:
+            self.parents[parent_x] = parent_y
+            self.sizes[parent_y] += self.sizes[parent_x]
+
+
 class Solution:
     def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
-        # Using BFS we will iterate over each island
-        # Create a get neighbor function
-        # Create a result variable
-        # BFS inplementation
-        # Iterate through each value
-        # Create a visited data structure
-        # If the value is 0 skip
-        # Create a queue
-        # Create a temp area
-        # Add the specific cell
-        # While queue
-        # Pop from the queue
-        # Get the neighbors
-        # If the neighbor is in visited we skip
-        # Increament the temp value and store the cell in visited
-        # Update the result with temp area
-        # Return result
 
-        def get_neighbor(cell, grid):
-            new_row = [1, 0, -1, 0]
-            new_col = [0, 1, 0, -1]
-            moves = []
+        ROWS, COLS = len(grid), len(grid[0])
+        uf = UnionFind(grid)
+        directions = [(0, -1), (0, 1), (-1, 0), (1, 0)]
 
-            for i in range(4):
-                r = cell[0] + new_row[i]
-                c = cell[1] + new_col[i]
+        for row in range(ROWS):
+            for col in range(COLS):
+                if grid[row][col] == 1:
+                    for dr, dc in directions:
+                        nr, nc = row + dr, col + dc
 
-                if 0 <= r < len(grid) and 0 <= c < len(grid[0]) and grid[r][c] == 1:
-                    moves.append((r, c))
-            return moves
+                        if 0 <= nr < ROWS and 0 <= nc < COLS and grid[nr][nc] == 1:
+                            uf.weighted_union((row, col), (nr, nc))
+     
+        if uf.sizes:
+            return max(uf.sizes.values())
+        else:
+            return 0
 
-        def bfs(grid):
-            visited = set()
-            res = 0
-            for i in range(len(grid)):
-                for j in range(len(grid[0])):
-                    if grid[i][j] == 0 or (i, j) in visited:
-                        continue
-
-                    queue = deque([(i, j)])
-                    tmp = 1
-                    visited.add((i, j))
-                    while queue:
-                        n = queue.popleft()
-                        for neighbor in get_neighbor((n[0], n[1]), grid):
-                            if (neighbor[0], neighbor[1]) in visited:
-                                continue
-                            visited.add((neighbor[0], neighbor[1]))
-                            queue.append((neighbor[0], neighbor[1]))
-                            tmp += 1
-
-                    res = max(res, tmp)
-
-            return res
-
-        return bfs(grid)
+        
+      
 
