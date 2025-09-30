@@ -1,13 +1,23 @@
 class Solution:
     def reverseWords(self, s: str) -> str:
-        def reverse(w):
-            return w[::-1]
+        word_list = []
 
-        words = s.split(" ")
-        result = []
+        for word in s.split(" "):
+            reverse_list = list(word)
+            
+            left = 0
+            right = len(reverse_list) - 1
 
-        for word in words:
-            result.append(reverse(word))
+            while left < right:
+                helper = reverse_list[left]
+                reverse_list[left] = reverse_list[right]
+                reverse_list[right] = helper
+                left += 1
+                right -= 1
 
-        return " ".join(word for word in result)
-
+            word_list.append("".join(reverse_list))
+            word_list.append(" ")
+        
+        
+        return "".join(word_list[0:-1])
+        
