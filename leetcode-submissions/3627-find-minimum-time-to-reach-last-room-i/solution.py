@@ -1,29 +1,34 @@
 class Solution:
     def minTimeToReach(self, moveTime: List[List[int]]) -> int:
 
-        heap = [(0, 0, 0)]
+        # source: (0, 0)
+        # moveTime[i][j]: min time the room opens and can be moved to
+        # cost = 1
+        # dest = (n - 1, m - 1)
+        # horizontal or vertical
+
+        # Dijkstra
+
         ROWS, COLS = len(moveTime), len(moveTime[0])
+        times = {(row, col): float("inf") for row in range(ROWS) for col in range(COLS)}
+        directions = [(0, -1), (0, 1), (-1, 0), (1, 0)]
+        min_heap = [(0, 0)]
+        times[(0, 0)] = 0
 
-        time = [[float("inf")] * COLS for _ in range(ROWS)]
-        time[0][0] = 0
-        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+        while min_heap:
 
-        while heap:
-
-            curr_time, row, col = heapq.heappop(heap)
-
-            if curr_time > time[row][col]:
-                continue
+            row, col = heapq.heappop(min_heap)
 
             for dr, dc in directions:
                 nr, nc = row + dr, col + dc
-                if not (0 <= nr < ROWS and 0 <= nc < COLS):
-                    continue
 
-                arrival_time = max(curr_time, moveTime[nr][nc]) + 1
-                if arrival_time < time[nr][nc]:
-                    time[nr][nc] = arrival_time
-                    heapq.heappush(heap, (arrival_time, nr, nc))
+                if 0 <= nr < ROWS and 0 <= nc < COLS:
 
-        return time[ROWS - 1][COLS - 1]
+                    new_time = max(times[(row, col)], moveTime[nr][nc]) + 1
+
+                    if new_time < times[(nr, nc)]:
+                        times[(nr, nc)] = new_time
+                        heapq.heappush(min_heap, (nr, nc))
+
+        return times[(ROWS - 1, COLS - 1)]
 
