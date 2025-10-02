@@ -1,44 +1,42 @@
 class Solution:
     def exist(self, board: List[List[str]], word: str) -> bool:
 
-        ROWS = len(board)
-        COLS = len(board[0])
-        movements = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-        word_len = len(word)
+        # Every cell can be a source
+        # DFS with tracking the word
 
-        starts = [
-            (row, col)
-            for row in range(ROWS)
-            for col in range(COLS)
-            if board[row][col] == word[0]
-        ]
+        # DFS
+        # Goal state
+        # path_len == n
+        # Fail state
+        # all possible cells from source visited
 
-        def backtrack(cell, ROWS, COLS, word_idx):
-            row, col = cell
+        n = len(word)
+        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+        ROWS, COLS = len(board), len(board[0])
 
-            if board[row][col] != word[word_idx]:
-                return False
+        def dfs(row, col, i, visited):
 
-            if word_idx == word_len - 1:
+            if i == n - 1:
                 return True
 
-            char = board[row][col]
-            board[row][col] = "#"
+            visited.add((row, col))
 
-            for dx, dy in movements:
-                x = row + dx
-                y = col + dy
+            for dr, dc in directions:
+                nr, nc = row + dr, col + dc
 
-                if 0 <= x < ROWS and 0 <= y < COLS:
-                    if backtrack((x, y), ROWS, COLS, word_idx + 1):
+                if 0 <= nr < ROWS and 0 <= nc < COLS and board[nr][nc] == word[i + 1]:
+                    if (nr, nc) in visited:
+                        continue
+
+                    if dfs(nr, nc, i + 1, visited):
                         return True
 
-            board[row][col] = char
-            return False
+            visited.remove((row, col))
 
-        for start in starts:
-            if backtrack(start, ROWS, COLS, 0):
-                return True
-
+        for i in range(ROWS):
+            for j in range(COLS):
+                if board[i][j] == word[0]:
+                    if dfs(i, j, 0, set()):
+                        return True
         return False
 
