@@ -4,21 +4,29 @@
 #         self.val = val
 #         self.left = left
 #         self.right = right
+from collections import deque
 class Solution:
     def deepestLeavesSum(self, root: Optional[TreeNode]) -> int:
-        queue = deque()
-        queue.append((root, 0))
-        last_loc, tot = 0, 0
-        while len(queue) != 0:
-            curr, loc = queue.popleft()
-            if loc != last_loc:
-                tot = 0
-                last_loc = loc
-            tot += curr.val
-
-            if curr.left:
-                queue.append((curr.left, loc + 1))
-            if curr.right:
-                queue.append((curr.right, loc + 1))
-        return tot
+        if not root:
+            return 0
         
+        queue = deque([root])
+        values = deque([root.val])
+        ans = sum(values)
+        while queue:
+            nodes_in_current_level = len(queue)
+            ans = sum(values)
+            
+            for nodes in range(nodes_in_current_level):
+                current_node = queue.popleft()
+                values.popleft()
+                
+                if current_node.left:
+                    queue.append(current_node.left)
+                    values.append(current_node.left.val)
+                if current_node.right:
+                    queue.append(current_node.right)
+                    values.append(current_node.right.val)
+                    
+        return ans
+            
