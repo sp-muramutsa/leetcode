@@ -4,48 +4,40 @@
 #         self.val = val
 #         self.left = left
 #         self.right = right
+
+from collections import deque
 class Solution:
     def zigzagLevelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
-
-
         if not root:
             return []
-
-        dq = deque([root])
-
-        traversal = []
-        left_to_right = True
-
-        while dq:     
-            level = []
-            k = len(dq)
-
-            for _ in range(k):
-                
-                if left_to_right:
-                    node = dq.pop()     
-                    level.append(node.val)
-
-                    if node.left:
-                        dq.appendleft(node.left)
-                    
-                    if node.right:
-                        dq.appendleft(node.right)
-                
-                else:
-                    node = dq.popleft()          
-                    level.append(node.val)
-
-                    if node.right:
-                        dq.append(node.right)
-                    
-                    if node.left:
-                        dq.append(node.left)
-            
-            left_to_right = not left_to_right
-            traversal.append(level)
         
-        return traversal
+        ans = []
+        queue = deque([root])
+        position = 0
+        
+        while queue:
+            nodes_in_current_level = len(queue)
+            holder = []
             
-
-
+            for node in queue:
+                holder.append(node.val)
+            
+            if position == 0:
+                ans.append(holder)
+                position = 1
+            else:
+                ans.append(holder[::-1])
+                position = 0
+                
+            
+            for i in range(nodes_in_current_level):
+                current_node = queue.popleft()
+                
+                if current_node.left:
+                    queue.append(current_node.left)
+                    
+                if current_node.right:
+                    queue.append(current_node.right)
+                    
+        return ans
+        
