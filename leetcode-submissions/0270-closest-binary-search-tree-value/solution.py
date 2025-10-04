@@ -4,27 +4,32 @@
 #         self.val = val
 #         self.left = left
 #         self.right = right
+
+from collections import deque
 class Solution:
     def closestValue(self, root: Optional[TreeNode], target: float) -> int:
-
-        # Binary search
-        min_diff = float("inf")
-        closest = root.val
-
-        while root:
-
-            diff = abs(root.val - target)
-            if diff < min_diff:
-                closest = root.val
-                min_diff = diff
-            elif diff == min_diff:
-                closest = min(closest, root.val)
-                min_diff = diff
-
-            if root.val > target:
-                root = root.left
-            else:
-                root = root.right
-
-        return closest
-
+        
+        queue = deque([root])
+        minimum_subtract = float("inf")
+        ans = root.val
+        
+        while queue:
+            number_of_nodes = len(queue)
+            
+            for i in range(number_of_nodes):
+                current_node = queue.popleft()
+                
+                if minimum_subtract > abs(target - current_node.val):
+                    ans = current_node.val
+                    minimum_subtract = abs(target - current_node.val)
+                    
+                elif minimum_subtract == abs(target - current_node.val):
+                    ans = min(ans,current_node.val)
+                    
+                if current_node.left:
+                    queue.append(current_node.left)
+                if current_node.right:
+                    queue.append(current_node.right)
+                    
+        return ans
+        
