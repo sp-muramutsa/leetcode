@@ -4,40 +4,35 @@
 #         self.val = val
 #         self.left = left
 #         self.right = right
-
-from collections import deque
 class Solution:
     def zigzagLevelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+
         if not root:
             return []
         
-        ans = []
-        queue = deque([root])
-        position = 0
+        q = [root]
+        reverse = False
+        zigzag = []
+
+        while q:
+
+            level = []
+            temp = []
+
+            for x in q:
+                temp.append(x.val)
+                if x.left:
+                    level.append(x.left)
+                if x.right:
+                    level.append(x.right)
+
+            if reverse:
+                temp.reverse()
+
+            zigzag.append(temp)
+            q = level
+            reverse = not reverse
         
-        while queue:
-            nodes_in_current_level = len(queue)
-            holder = []
-            
-            for node in queue:
-                holder.append(node.val)
-            
-            if position == 0:
-                ans.append(holder)
-                position = 1
-            else:
-                ans.append(holder[::-1])
-                position = 0
-                
-            
-            for i in range(nodes_in_current_level):
-                current_node = queue.popleft()
-                
-                if current_node.left:
-                    queue.append(current_node.left)
-                    
-                if current_node.right:
-                    queue.append(current_node.right)
-                    
-        return ans
-        
+        return zigzag
+
+
