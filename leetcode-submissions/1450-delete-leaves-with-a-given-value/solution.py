@@ -5,20 +5,24 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def removeLeafNodes(self, root: Optional[TreeNode], target: int) -> Optional[TreeNode]:
+    def removeLeafNodes(
+        self, root: Optional[TreeNode], target: int
+    ) -> Optional[TreeNode]:
 
-        # Base case 
-        if not root:
-            return None
+        def delete(node, target):
 
-        # Check the node's children
-        root.left = self.removeLeafNodes(root.left, target)
+            if not node:
+                return None
 
-        root.right = self.removeLeafNodes(root.right, target)
+            # Check children first to make it possible for the curr node to be a leaf later
+            node.left = delete(node.left, target)
+            node.right = delete(node.right, target)
 
-        # Check the node itself.
-        if not root.left and not root.right and root.val == target:
-            return None
+            if not node.right and not node.left and node.val == target:
+                return None
 
-        return root
+            return node
+
+        return delete(root, target)
+    
 
