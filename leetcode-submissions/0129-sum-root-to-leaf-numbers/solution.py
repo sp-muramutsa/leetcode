@@ -6,28 +6,25 @@
 #         self.right = right
 class Solution:
     def sumNumbers(self, root: Optional[TreeNode]) -> int:
+        
 
-        # Top to bottom traversing both left and right
-        # Check the result when you get down
-        # Use Menon's trick to append a new digit to the number
-        # Solve it like 112. Path Sum
-        # Pass the new digit in brackets so we don't have to
-        # worry about cleaning it up when backtracking
+        total = 0
 
-        self.sum = 0
-
-        def dfs(node, curr_number):
+        def f(node, curr_sum):
 
             if not node:
                 return
+                
+            if not node.right and not node.left:
+                nonlocal total
+                curr_sum = (curr_sum * 10) + node.val
+                total += curr_sum
+                return 
 
-            # Leaf
-            if not node.left and not node.right:
-                self.sum += (curr_number * 10) + node.val
-
-            dfs(node.left, (curr_number * 10) + node.val)
-            dfs(node.right, (curr_number * 10) + node.val)
-
-        dfs(root, 0)
-        return self.sum
-
+            curr_sum = (curr_sum * 10) + node.val
+            f(node.left, curr_sum)
+            f(node.right, curr_sum)
+            curr_sum /= 10
+        
+        f(root, 0)
+        return total 
