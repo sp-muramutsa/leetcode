@@ -5,47 +5,47 @@
 #         self.left = None
 #         self.right = None
 
+
 class Solution:
-    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
-        
-        # Traverse with dfs till we reach p. keep its ancestors
-        # Traverse with dfs till we reach q. keep its ancestors
-        # Find the LCA in the ancestors list
+    def lowestCommonAncestor(
+        self, root: "TreeNode", p: "TreeNode", q: "TreeNode"
+    ) -> "TreeNode":
 
-        def get_ancestors(root, target, path):
-            
-            # Terminal
-            if not root:
+        def dfs(node, target):
+
+            if not node:
                 return False
-            
-            # Goal
-            path.append(root)
-            if root == target:
-                return True
-            
-            # Recursive
-            if get_ancestors(root.left, target, path):
-                return True
-        
-            
-            if get_ancestors(root.right, target, path):
-                return True
-            
-            path.pop()     
-            
-        
-        p_ancestors = []
-        get_ancestors(root, p, p_ancestors)
-        
-        q_ancestors = []
-        get_ancestors(root, q, q_ancestors)
 
-      
-        seen = set(q_ancestors)
-        i = len(p_ancestors) - 1
-        
-        while i >= 0:
-            if p_ancestors[i] in seen:
-                return p_ancestors[i]
-            i -= 1
-           
+            traversal.append(node)
+            if node == target:
+                return True
+
+            if dfs(node.left, target):
+                return True
+
+            if dfs(node.right, target):
+                return True
+
+            traversal.pop()
+
+        traversal = []
+        dfs(root, p)
+        A = traversal
+
+        traversal = []
+        dfs(root, q)
+        B = traversal
+
+        if len(A) < len(B):
+            A, B = B, A
+
+        lenA = len(A)
+        lenB = len(B)
+        seen = set(B)
+
+        for i in range(lenB - 1, -1, -1):
+            if A[i] in seen:
+                return A[i]
+
+        return
+
