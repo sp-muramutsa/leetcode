@@ -1,50 +1,32 @@
-class DSU:
-    def __init__(self, n):
-        self.parents = [i for i in range(n)]
-        self.ranks = [0 for _ in range(n)]
-        self.connected_components = n
-
-    def find(self, x):
-        """
-        Find with path compression
-        """
-
-        if self.parents[x] != x:
-            self.parents[x] = self.find(self.parents[x])
-
-        return self.parents[x]
-
-    def union(self, x, y):
-        """
-        Union with rank heuristic
-        """
-
-        parent_x = self.find(x)
-        parent_y = self.find(y)
-
-        if parent_x == parent_y:
-            return
-
-        rank_x = self.ranks[parent_x]
-        rank_y = self.ranks[parent_y]
-
-        if rank_x > rank_y:
-            self.parents[parent_y] = parent_x
-        elif rank_x < rank_y:
-            self.parents[parent_x] = parent_y
-        else:
-            self.parents[parent_x] = parent_y
-            self.ranks[parent_y] += 1
-
-        self.connected_components -= 1
-
-
+from collections import deque
+from collections import defaultdict
 class Solution:
     def countComponents(self, n: int, edges: List[List[int]]) -> int:
-
-        dsu = DSU(n)
-        for src, dest in edges:
-            dsu.union(src, dest)
-
-        return dsu.connected_components
-
+        if not edges:
+            return 1
+        
+        graph = defaultdict(list)
+        for node, neighbour in edges:
+            graph[node].append(neighbour)
+            graph[neighbour].append(node)
+            
+        visited = set()
+        answer = n - len(graph)
+        
+        def bfs(node):
+            visited.add(node)
+            queue = deque([node])
+            
+            while queue:
+                current_node = queue.popleft()
+                
+                for neighbour in graph[current_node]:
+                    if neighbour not in visited:
+                        visited.add(neighbour)
+                        queue.append(neighbour)
+                        
+        for node in graph:
+            if node not in visited:
+                answer += 1
+                bfs(node)
+        return answer
