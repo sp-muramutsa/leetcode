@@ -1,58 +1,43 @@
-class UnionFind:
-    def __init__(self, grid):
-        self.parents = {}
-        self.sizes = {}
-
-        ROWS, COLS = len(grid), len(grid[0])
-
-        for row in range(ROWS):
-            for col in range(COLS):
-                if grid[row][col] == 1:
-                    self.parents[(row, col)] = (row, col)
-                    self.sizes[(row, col)] = 1
-
-    def collapsing_find(self, x):
-
-        if self.parents[x] != x:
-            self.parents[x] = self.collapsing_find(self.parents[x])
-        return self.parents[x]
-
-    def weighted_union(self, x, y):
-
-        parent_x = self.collapsing_find(x)
-        parent_y = self.collapsing_find(y)
-        if parent_x == parent_y:
-            return
-
-        if self.sizes[parent_x] > self.sizes[parent_y]:
-            self.parents[parent_y] = parent_x
-            self.sizes[parent_x] += self.sizes[parent_y]
-        else:
-            self.parents[parent_x] = parent_y
-            self.sizes[parent_y] += self.sizes[parent_x]
-
-
+from collections import deque
 class Solution:
     def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
-
-        ROWS, COLS = len(grid), len(grid[0])
-        uf = UnionFind(grid)
-        directions = [(0, -1), (0, 1), (-1, 0), (1, 0)]
-
-        for row in range(ROWS):
-            for col in range(COLS):
-                if grid[row][col] == 1:
-                    for dr, dc in directions:
-                        nr, nc = row + dr, col + dc
-
-                        if 0 <= nr < ROWS and 0 <= nc < COLS and grid[nr][nc] == 1:
-                            uf.weighted_union((row, col), (nr, nc))
-     
-        if uf.sizes:
-            return max(uf.sizes.values())
-        else:
+        if len(grid) == 0:
             return 0
-
         
-      
-
+        visited = set()
+        answer = 0
+        
+        rows, columns = len(grid), len(grid[0])
+        
+        directions = [(1,0), (-1,0), (0,1), (0,-1)]
+        
+        def bfs(row,column):
+            visited.add((row,column))
+            area = 0
+            queue = deque([(row,column)])
+            
+            while queue:
+                r, c = queue.popleft()
+                area += 1
+                
+                for direction_row, direction_column in directions:
+                    current_row = r + direction_row
+                    current_column = c + direction_column
+                    
+                    if  (
+                        (current_row in range(rows)) and
+                        (current_column in range(columns)) and
+                        (grid[current_row][current_column] == 1) and
+                        ((current_row,current_column) not in visited)
+                        ):
+                        visited.add((current_row,current_column))
+                        queue.append((current_row,current_column))
+                        
+            return area
+                
+        for row in range(rows):
+            for column in range(columns):
+                if((row, column) not in visited) and (grid[row][column] == 1):
+                    answer = max(answer,bfs(row,column))
+                    
+        return answer
