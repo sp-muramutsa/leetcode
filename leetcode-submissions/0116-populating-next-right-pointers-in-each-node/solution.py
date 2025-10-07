@@ -11,26 +11,38 @@ class Node:
 
 class Solution:
     def connect(self, root: "Optional[Node]") -> "Optional[Node]":
-
+        
         if not root:
             return root
+        
+        q = []
+        if root.left:
+            q.append(root.left)
+        
+        if root.right:
+            q.append(root.right)
 
-        stack = deque([root])
+        while q:
 
-        while stack:
-            k = len(stack)
-            for _ in range(k):
-                node = stack.pop()
+            new_q = []
+            n = len(q)
 
-                if node.left:
-                    stack.appendleft(node.left)
+            for i in range(n - 1):
+                q[i].next = q[i + 1]
 
-                if node.right:
-                    stack.appendleft(node.right)
+                if q[i].left:
+                    new_q.append(q[i].left)
 
-            l = len(stack)
-            for i in range(l - 1, 0, -1):
-                stack[i].next = stack[i - 1]
+                if q[i].right:
+                    new_q.append(q[i].right)
+
+                if q[i + 1].left:
+                    new_q.append(q[i + 1].left)
+
+                if q[i + 1].right:
+                    new_q.append(q[i + 1].right)
+
+            q = new_q
 
         return root
 
