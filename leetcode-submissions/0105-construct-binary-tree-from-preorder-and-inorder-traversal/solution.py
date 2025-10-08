@@ -6,27 +6,45 @@
 #         self.right = right
 class Solution:
     def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
+        """
+        - preorder = [3,9,20,15,7]
+        - inorder = [9,3,15,20,7]
 
+        - start with 3 (first in preorder)
+        - find the index of 3 in the inorder array
+        - i = 0
+        - l, r = 0, 4
+        - [3].left = [9]
+        - [3].right = [15, 20, 7]
+
+        - i = 1
+        - l, r = 0, 1
+        - [9]
+
+        - i = 3
+        - [20]
+        - l, r = 1, 4
+        """
+
+        inorder_indices = {x: i for i, x in enumerate(inorder)}
         n = len(preorder)
-        self.i = 0
-        inorder_indices = {val: idx for idx, val in enumerate(inorder)}
+        i = 0
 
-        def builder(low, high):
+        def f(left, right):
 
-            if low == high:
-                return
+            nonlocal i
+            if i >= n:
+                return None
 
-            if self.i == n:
-                return
+            if left == right:
+                return None
 
-            idx = inorder_indices[preorder[self.i]]
-            root = TreeNode(preorder[self.i])
-            self.i += 1
-            
-            root.left = builder(low, idx)
-            root.right = builder(idx + 1, high)
+            inorder_idx = inorder_indices[preorder[i]]
+            node = TreeNode(inorder[inorder_idx])
+            i += 1
+            node.left = f(left, inorder_idx)
+            node.right = f(inorder_idx + 1, right)
+            return node
 
-            return root
-
-        return builder(0, n)
+        return f(0, n)
 
