@@ -11,9 +11,7 @@ class Solution:
             return []
 
         columns = defaultdict(list)
-        min_col, max_col = float("inf"), float("-inf")
         traversal = []
-
         dq = deque([(0, root)])
 
         while dq:
@@ -21,8 +19,6 @@ class Solution:
 
             for _ in range(k):
                 col, node = dq.popleft()
-                min_col = min(min_col, col)
-                max_col = max(max_col, col)
                 columns[col].append(node.val)
 
                 if node.left:
@@ -31,6 +27,8 @@ class Solution:
                 if node.right:
                     dq.append((col + 1, node.right))
 
+        min_col = min(columns.keys())
+        max_col = max(columns.keys())
         for i in range(min_col, max_col + 1):
             traversal.append(columns[i])
 
