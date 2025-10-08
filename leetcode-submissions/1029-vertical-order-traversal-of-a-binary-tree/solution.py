@@ -6,31 +6,62 @@
 #         self.right = right
 class Solution:
     def verticalTraversal(self, root: Optional[TreeNode]) -> List[List[int]]:
+        """
+        - (row, col)
+        - (0, 0)
+        - left: (row + 1, col - 1)
+        - right: (row + 1, col + 1)
 
-        columns = defaultdict(list)
-        min_col, max_col = float("inf"), float("-inf")
+        - if nodes are in the same column and row, sort them by value
+            - when can this happen?
 
-        stack = [(0, 0, root)]
+        - dfs + hashing
+            - hashmap: defaultdict(list)
 
-        while stack:
+        dfs(node, row, col) -> starting at dfs(root, 0, 0):
+            if not node:
+                return
 
-            col, row, node = stack.pop()
-            columns[col].append((row, node.val))
+            hashmap[(row, col)].append(node.val)
+            dfs(node.left, row + 1, col - 1)
+            dfs(node.right, row + 1, col + 1)
 
-            min_col = min(min_col, col)
-            max_col = max(max_col, col)
+        0, 0:   1
+        -1, 1:  2
+        -2, 2:  4
+        0, 2:   5, 6
+        1, 1:   3
+        2, 2:   7
 
-            if node.left:
-                stack.append((col - 1, row + 1, node.left))
+        - min and max
+        """
 
-            if node.right:
-                stack.append((col + 1, row + 1, node.right))
+        hashmap = defaultdict(list)
 
-        traversal = []
-        for i in range(min_col, max_col + 1):
-            column = sorted(columns[i])
-            values = [y for x, y in column]
-            traversal.append(values)
+        def dfs(node, row, col):
+            if not node:
+                return
 
-        return traversal
+            hashmap[col].append((row, node.val))
+            dfs(node.left, row + 1, col - 1)
+            dfs(node.right, row + 1, col + 1)
+
+        dfs(root, 0, 0)
+        minimum = min(hashmap.keys())
+        maximum = max(hashmap.keys())
+        columns = []
+
+        for i in range(abs(minimum), -1, -1):
+            columns.append(sorted(hashmap[-i]))
+
+        for j in range(1, maximum + 1):
+            columns.append(sorted(hashmap[j]))
+
+        result = []
+        for col in columns:
+            col = sorted(col, key=lambda x: x[0])
+            temp = [x for _, x in col]
+            result.append(temp)
+
+        return result
 
